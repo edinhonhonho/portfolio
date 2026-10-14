@@ -17,7 +17,7 @@
 <body>
 
   <div class="topbar">
-    <a class="brand" href="#topo">Edinho</a>
+    <a class="brand" href="#topo"><svg class="mark" viewBox="0 0 32.6 28.4" aria-hidden="true"><polygon points="15.12,12.50 9.40,15.80 3.68,12.50 3.68,5.90 9.40,2.60 15.12,5.90" fill="#d3202b" stroke="#d3202b" stroke-width="1.6" stroke-linejoin="round"/><polygon points="27.59,12.50 21.87,15.80 16.15,12.50 16.15,5.90 21.87,2.60 27.59,5.90" fill="#e9b72e" stroke="#e9b72e" stroke-width="1.6" stroke-linejoin="round"/><polygon points="21.35,23.30 15.64,26.60 9.92,23.30 9.92,16.70 15.64,13.40 21.35,16.70" fill="#f08a8f" stroke="#f08a8f" stroke-width="1.6" stroke-linejoin="round"/></svg>Edinho</a>
     <nav>
       <a href="#analises">Análises espaciais</a>
       <a href="#apoio">Apoio e relatórios</a>
@@ -124,6 +124,7 @@
 <polygon class="l1" points="225.8,488.2 203.7,501.0 181.6,488.2 181.6,462.8 203.7,450.0 225.8,462.8"/>
 <polygon class="l1" points="272.5,488.2 250.4,501.0 228.4,488.2 228.4,462.8 250.4,450.0 272.5,462.8"/>
     </svg>
+    <p class="hex-hint" aria-hidden="true">Clique e arraste nos hexágonos para pintar</p>
     <div class="hero-text">
       <p class="eyebrow">Geógrafo · Porto Alegre/RS</p>
       <h1>Edinho</h1>
@@ -390,14 +391,6 @@
       </header>
       <div class="grid projects">
         <article class="card work-card">
-          <p class="kind">Site</p>
-          <h3>Repositório de Mapas</h3>
-          <p>Catálogo dos mapas temáticos com busca em tempo real, visualização ampliada e download em PDF. Foi o ponto de partida deste portfólio.</p>
-          <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Vercel</li></ul>
-          <p class="ctx">Projeto pessoal</p>
-          <a class="link" href="https://repositoriodemapas.vercel.app/"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a>
-        </article>
-        <article class="card work-card">
           <p class="kind">Análise espacial</p>
           <h3>Análise espacial de votações</h3>
           <p>Pipeline em Python que analisa a votação em eleições proporcionais por município e dentro das cidades, a partir de dados abertos do TSE e do IBGE, com dashboard, mapas interativos e grade hexagonal H3.</p>
@@ -406,12 +399,22 @@
           <a class="link" href="https://github.com/edinhonhonho/analise-candidaturas" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a>
         </article>
         <article class="card work-card">
-          <p class="kind">Aplicativo</p>
+          <p class="kind">Aplicativo web (PWA)</p>
           <h3>Financeiro</h3>
-          <p>Aplicativo web de controle financeiro, com lançamentos, quitação e movimentações.</p>
-          <ul class="chips"><li>Web app</li><li>Finanças</li></ul>
+          <p>Controle financeiro pessoal com receitas, despesas, cartões e faturas, parcelamentos, categorias e gastos compartilhados com outras pessoas. Instalável no celular, funciona offline e envia notificações push.</p>
+          <ul class="chips"><li>React</li><li>TypeScript</li><li>Supabase</li><li>PostgreSQL</li></ul>
+          <dl class="stack"><div><dt>Front-end</dt><dd>React 19, TypeScript, Vite, Tailwind CSS 4 e Recharts (gráficos)</dd></div><div><dt>Base de dados</dt><dd>Supabase (PostgreSQL) com tabelas de transações, cartões, categorias, pessoas e notificações</dd></div><div><dt>Serviços</dt><dd>Supabase Edge Function para notificações push, PWA com service worker e GitHub Actions para manter o banco ativo</dd></div></dl>
           <p class="ctx">Projeto pessoal</p>
           <a class="link" href="https://github.com/edinhonhonho/financeiro" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a>
+        </article>
+        <article class="card work-card">
+          <p class="kind">Webmap colaborativo</p>
+          <h3>Frente da Panfletagem</h3>
+          <p>Mapa colaborativo do Rio Grande do Sul para marcar ruas panfletadas e agendadas, com filtros, número de repetições por rua e registro de quem panfletou. Os dados são compartilhados entre todos que abrem o site.</p>
+          <ul class="chips"><li>Leaflet</li><li>MapLibre GL</li><li>Supabase</li><li>OpenStreetMap</li></ul>
+          <dl class="stack"><div><dt>Front-end</dt><dd>HTML, CSS e JavaScript puros, com Leaflet e MapLibre GL; ruas do OpenStreetMap em recortes locais</dd></div><div><dt>Base de dados</dt><dd>Supabase (PostgreSQL) com tabela de panfletagens e permissões por linha (RLS)</dd></div><div><dt>Hospedagem</dt><dd>Site estático publicado na Vercel</dd></div></dl>
+          <p class="ctx">Projeto pessoal</p>
+          <a class="link" href="https://github.com/edinhonhonho/panfletagem" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a>
         </article>
       </div>
     </section>
