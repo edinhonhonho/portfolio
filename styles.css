@@ -389,3 +389,37 @@ main .card .map-info .text {
         border-radius: 15px;
     }
 }
+
+/* Resume entries */
+header .hero .contact a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+main .card.entry {
+    margin-bottom: 14px;
+}
+
+main .card.entry .org {
+    margin-top: 4px;
+    font-size: 1.05rem;
+}
+
+main .card.entry .period {
+    margin-top: 2px;
+    color: var(--background-middle-contrast);
+}
+
+main .card.entry .period i {
+    margin-right: 6px;
+}
+
+main .card.entry .bullets {
+    margin: 10px 0 0;
+    padding-left: 18px;
+}
+
+main .card.entry .bullets li {
+    margin-bottom: 4px;
+    line-height: 1.35;
+}
