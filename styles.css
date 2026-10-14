@@ -80,20 +80,13 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 
 .hexes {
     position: absolute;
-    right: -30px;
+    right: var(--gutter);
     top: 50%;
     transform: translateY(-50%);
-    height: calc(100% - 36px);
+    height: calc(100% - 44px);
     width: auto;
-    max-width: 90vw;
+    max-width: 46vw;
 }
-
-.hexes polygon { fill: var(--red); }
-.hexes .l1 { opacity: .07; }
-.hexes .l2 { opacity: .13; }
-.hexes .l3 { opacity: .22; }
-.hexes .l4 { opacity: .34; }
-.hexes .gold { fill: var(--gold); opacity: .55; }
 
 .hero-text { position: relative; max-width: 1120px; }
 .hero.dragging { user-select: none; }
@@ -269,7 +262,8 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .topbar { flex-wrap: wrap; padding: 10px 16px; gap: 8px 16px; }
     .topbar nav { order: 3; flex-basis: 100%; }
     .hero { padding: 40px 20px 36px; }
-    .hexes { right: -240px; opacity: .6; }
+    .hero { display: flex; flex-direction: column; }
+    .hexes { position: static; transform: none; order: 2; height: auto; width: min(82vw, 330px); max-width: none; margin: 28px auto 0; }
     main { padding: 0 20px 32px; }
     :root { --gutter: 20px; }
     .category { padding-top: 60px; }
@@ -365,7 +359,7 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 
 /* Interactive hero hexagons */
 .hexes { pointer-events: none; }
-.hexes polygon { transition: opacity .25s, fill .25s; }
+.hexes polygon { opacity: .9; transition: opacity .2s, fill .2s; }
 .hexes g g polygon { transition: none; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -390,3 +384,12 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     transition: border-color .2s, background .2s;
 }
 .links .link:hover { border-color: var(--red); background: var(--red-soft); text-decoration: none; }
+
+/* Cards with screenshots */
+.print-card { grid-column: 1 / -1; }
+.prints { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 6px; }
+.prints.single { grid-template-columns: minmax(0, 620px); }
+.prints a { display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.prints a:hover { border-color: #cfc8b8; box-shadow: 0 8px 24px rgba(28, 26, 25, .08); }
+.prints img { display: block; width: 100%; height: auto; }
+.print-card .ctx { color: var(--muted); font-size: .83rem; }

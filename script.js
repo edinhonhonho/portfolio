@@ -1,6 +1,6 @@
-// Interactive hexagons in the hero: they glow near the pointer; a click (or drag) paints
-// hexagons with the legend colours (grey, green, yellow, orange, red-orange, red).
-// Painting a whole row with one colour sets off a wave of hexagons.
+// Interactive hexagons in the hero. Every hexagon sits on a class of the legend scale (grey, green,
+// yellow, amber, orange, red). Under the pointer the hexagons show ONE class above their own;
+// a click (or drag) paints them with that class. A row painted in a single class sets off a wave.
 (function () {
     const hero = document.querySelector('.hero');
     const svg = hero && hero.querySelector('.hexes');
@@ -8,18 +8,22 @@
 
     const NS = 'http://www.w3.org/2000/svg';
     const PALETTE = ['#d3d3d0', '#96bd3c', '#e6d20f', '#f3ad00', '#ea670f', '#ec1a37'];
-    const RADIUS = 130, PAINTED = 0.9, GLOW = 0.7;
+    const REST = 0.9;
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const next = l => (l + 1) % PALETTE.length;
 
     const hexes = [...svg.querySelectorAll('polygon')].map(el => {
         const b = el.getBBox();
         el.style.transformBox = 'fill-box';
         el.style.transformOrigin = 'center';
-        // Implicit class on the scale, taken from the tint of the hexagon (l1..l4); gold ones sit in the middle
-        const cls = el.classList;
-        const own = cls.contains('gold') ? 2 : cls.contains('l4') ? 3 : cls.contains('l3') ? 2 : cls.contains('l2') ? 1 : 0;
-        return { el, cx: b.x + b.width / 2, cy: b.y + b.height / 2, base: parseFloat(getComputedStyle(el).opacity) || 0.1, v: -1, own, row: null };
+        return { el, cx: b.x + b.width / 2, cy: b.y + b.height / 2, lvl: +el.dataset.l, row: null };
     });
+
+    // Distance between neighbouring centres, used as the unit for "close to the pointer"
+    let spacing = Infinity;
+    for (let i = 1; i < hexes.length; i++) {
+        spacing = Math.min(spacing, Math.hypot(hexes[0].cx - hexes[i].cx, hexes[0].cy - hexes[i].cy));
+    }
 
     // Rows: hexagons sharing the same vertical centre
     const rows = new Map();
@@ -39,31 +43,25 @@
         return m ? new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse()) : null;
     }
 
-    const level = h => (h.v >= 0 ? h.v : h.own);
+    const dist = (h, pt) => Math.hypot(h.cx - pt.x, h.cy - pt.y);
 
-    function nearest(pt) {
+    function under(pt) {
         let best = null, bd = Infinity;
         for (const h of hexes) {
-            const d = Math.hypot(h.cx - pt.x, h.cy - pt.y);
+            const d = dist(h, pt);
             if (d < bd) { bd = d; best = h; }
         }
-        return bd < 28 ? best : null;
+        return bd < spacing * 0.62 ? best : null;
     }
 
-    // Around the pointer every hexagon shows one class above its own on the colour scale (grey, green,
-    // yellow, orange...), strongest right under the pointer and fading with distance.
     let raf = 0, last = null, brush = -1;
     function paint() {
         raf = 0;
-        const near = last && brush < 0;
-        const under = near ? nearest(last) : null;
+        const hover = last && brush < 0;
         for (const h of hexes) {
-            const t = near ? Math.max(0, 1 - Math.hypot(h.cx - last.x, h.cy - last.y) / RADIUS) : 0;
-            h.el.style.fill = t > 0.04 ? PALETTE[(level(h) + 1) % PALETTE.length] : (h.v >= 0 ? PALETTE[h.v] : '');
-            let o = h.v >= 0 ? PAINTED : h.base;
-            if (t > 0) o = Math.max(o, h.base + (GLOW - h.base) * t * t);
-            if (h === under) o = PAINTED;
-            h.el.style.opacity = o.toFixed(3);
+            const raised = hover && dist(h, last) <= spacing * 1.15;
+            h.el.style.fill = PALETTE[raised ? next(h.lvl) : h.lvl];
+            h.el.style.opacity = raised ? 1 : REST;
         }
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
@@ -84,9 +82,9 @@
         row.hexes.forEach((h, i) => {
             const delay = i * 80;
             h.el.animate([
-                { transform: 'scale(1) rotate(0deg)', fill: color, opacity: 0.9 },
-                { transform: 'scale(1.5) rotate(30deg)', fill: '#fff3b0', opacity: 1, offset: 0.45 },
-                { transform: 'scale(1) rotate(60deg)', fill: color, opacity: 0.9 }
+                { transform: 'scale(1) rotate(0deg)', fill: color, opacity: REST },
+                { transform: 'scale(1.4) rotate(30deg)', fill: '#fff3b0', opacity: 1, offset: 0.45 },
+                { transform: 'scale(1) rotate(60deg)', fill: color, opacity: REST }
             ], { duration: 800, delay, easing: 'cubic-bezier(.3,1.4,.5,1)' });
 
             for (let k = 0; k < 8; k++) {
@@ -94,31 +92,28 @@
                 const g = document.createElementNS(NS, 'g');
                 g.setAttribute('transform', `translate(${h.cx.toFixed(1)} ${h.cy.toFixed(1)})`);
                 const p = document.createElementNS(NS, 'polygon');
-                const size = 6 + Math.random() * 9;
-                p.setAttribute('points', hexPoints(size));
-                p.style.fill = k % 3 === 2 ? '#e9b72e' : color; // CSS rule on .hexes polygon would beat a fill attribute
+                p.setAttribute('points', hexPoints(5 + Math.random() * 8));
+                p.style.fill = k % 3 === 2 ? '#e9b72e' : color;
                 p.style.opacity = '0';
                 g.appendChild(p);
                 fx.appendChild(g);
                 const ang = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
-                const dist = 50 + Math.random() * 90;
+                const dist2 = 40 + Math.random() * 80;
                 const a = p.animate([
                     { transform: 'translate(0,0) rotate(0deg) scale(.4)', opacity: 0.95 },
-                    { transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist}px) rotate(${(Math.random() - 0.5) * 240}deg) scale(1)`, opacity: 0.8, offset: 0.55 },
-                    { transform: `translate(${Math.cos(ang) * dist * 1.25}px, ${Math.sin(ang) * dist * 1.25 + 24}px) rotate(${(Math.random() - 0.5) * 360}deg) scale(.2)`, opacity: 0 }
+                    { transform: `translate(${Math.cos(ang) * dist2}px, ${Math.sin(ang) * dist2}px) rotate(${(Math.random() - 0.5) * 240}deg) scale(1)`, opacity: 0.8, offset: 0.55 },
+                    { transform: `translate(${Math.cos(ang) * dist2 * 1.25}px, ${Math.sin(ang) * dist2 * 1.25 + 24}px) rotate(${(Math.random() - 0.5) * 360}deg) scale(.2)`, opacity: 0 }
                 ], { duration: 1100 + Math.random() * 500, delay: delay + 120, easing: 'ease-out', fill: 'backwards' });
                 a.onfinish = () => g.remove();
             }
         });
     }
 
-    function paintHex(h, v) {
-        h.v = v;
-        h.el.style.fill = PALETTE[v];
+    function paintHex(h, lvl) {
+        h.lvl = lvl;
         const row = h.row;
-        const same = row.hexes.every(x => x.v === v);
-        if (same) {
-            if (row.done !== v) { row.done = v; celebrate(row, PALETTE[v]); }
+        if (row.hexes.every(x => x.lvl === lvl)) {
+            if (row.done !== lvl) { row.done = lvl; celebrate(row, PALETTE[lvl]); }
         } else {
             row.done = -1;
         }
@@ -128,8 +123,8 @@
     hero.addEventListener('pointermove', e => {
         last = toSvg(e);
         if (brush >= 0 && last) {
-            const h = nearest(last);
-            if (h && h.v !== brush) paintHex(h, brush);
+            const h = under(last);
+            if (h && h.lvl !== brush) paintHex(h, brush);
         }
         schedule();
     });
@@ -137,14 +132,14 @@
     hero.addEventListener('pointerdown', e => {
         if (e.target.closest('a, button, input')) return;
         const pt = toSvg(e);
-        const h = pt && nearest(pt);
+        const h = pt && under(pt);
         if (!h) return;
-        brush = (level(h) + 1) % PALETTE.length;
+        brush = next(h.lvl);
         hero.classList.add('dragging');
         paintHex(h, brush);
         last = pt;
     });
-    const stop = () => { brush = -1; hero.classList.remove('dragging'); };
+    const stop = () => { brush = -1; hero.classList.remove('dragging'); schedule(); };
     window.addEventListener('pointerup', stop);
     window.addEventListener('pointercancel', stop);
 })();
