@@ -108,10 +108,10 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 
 .hexes {
     position: absolute;
-    right: -50px;
+    right: -40px;
     top: 50%;
     transform: translateY(-50%);
-    width: 480px;
+    width: 570px;
     max-width: 90vw;
 }
 
@@ -186,7 +186,7 @@ main { padding: 0 var(--gutter) 56px; }
 .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .sec-head p { color: var(--muted); margin-top: 8px; max-width: 58ch; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; align-items: start; }
 .grid.projects { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
 
 .card {
@@ -269,7 +269,7 @@ main { padding: 0 var(--gutter) 56px; }
 /* About */
 .about-grid { display: grid; gap: 36px; }
 
-.lead { font-size: clamp(1.4rem, 2.8vw, 2rem); line-height: 1.35; letter-spacing: -0.02em; font-weight: 500; max-width: 36ch; }
+.lead { font-size: clamp(1.4rem, 2.8vw, 2rem); line-height: 1.35; letter-spacing: -0.02em; font-weight: 500; }
 
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 
@@ -282,10 +282,9 @@ main { padding: 0 var(--gutter) 56px; }
 
 footer {
     padding: 40px var(--gutter) 56px;
-    text-align: left;
+    text-align: center;
     color: var(--muted);
     font-size: .9rem;
-    border-top: 1px solid var(--line);
 }
 
 footer a { color: var(--red); text-decoration: none; }
@@ -302,7 +301,6 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .hexes { right: -240px; opacity: .6; }
     main { padding: 0 20px 32px; }
     :root { --gutter: 20px; }
-    .hex-hint { display: none; }
     .category { padding-top: 60px; }
     .grid, .grid.projects { grid-template-columns: 1fr; }
 }
@@ -403,22 +401,11 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .hexes polygon { transition: none; }
 }
 
-/* Hero hint */
-.hex-hint {
-    position: absolute;
-    right: var(--gutter);
-    bottom: 12px;
-    z-index: 1;
-    font-size: .78rem;
-    color: var(--muted);
-    pointer-events: none;
-}
 
-/* Technology rows on project cards */
-.stack { display: grid; gap: 8px; margin-top: 4px; padding-top: 12px; border-top: 1px dashed var(--line); }
-.stack dt { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--red); }
-.stack dd { margin: 0; font-size: .88rem; color: #4a4541; line-height: 1.45; }
 
 @media (max-width: 760px) {
     .topbar { padding-left: 20px; padding-right: 20px; }
 }
+
+.links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 4px; }
+.links .link { margin-top: 0; }
