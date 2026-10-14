@@ -1,39 +1,3 @@
-const cards = document.querySelectorAll('.card');
-const sections = document.querySelectorAll('.category');
-const groups = document.querySelectorAll('.subgroup');
-const searchInput = document.getElementById('searchbox');
-const noResults = document.getElementById('noresults');
-
-function liveSearch() {
-    const query = searchInput.value.trim().toLowerCase();
-    let total = 0;
-
-    cards.forEach(card => {
-        const match = card.textContent.toLowerCase().includes(query);
-        card.hidden = !match;
-        if (match) total++;
-    });
-
-    groups.forEach(group => {
-        group.hidden = query !== '' && !group.querySelector('.card:not([hidden])');
-    });
-
-    sections.forEach(section => {
-        const hasCards = section.querySelector('.card') !== null;
-        const noMatch = hasCards ? !section.querySelector('.card:not([hidden])') : true;
-        section.hidden = query !== '' && noMatch;
-    });
-
-    noResults.hidden = total > 0;
-}
-
-let typingTimer;
-searchInput.addEventListener('input', () => {
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(liveSearch, 250);
-});
-
-
 // Interactive hexagons in the hero: they glow near the pointer; a click (or drag) paints
 // hexagons with the legend colours (grey, green, yellow, orange, red-orange, red).
 // Painting a whole row with one colour sets off a wave of hexagons.
@@ -81,11 +45,20 @@ searchInput.addEventListener('input', () => {
         return bd < 28 ? best : null;
     }
 
-    let raf = 0, last = null;
+    // The hexagon under the pointer previews the next colour of the scale (what a click would paint)
+    let raf = 0, last = null, hovered = null, brush = -1;
+    function setHover(h) {
+        if (h === hovered) return;
+        if (hovered) hovered.el.style.fill = hovered.v >= 0 ? PALETTE[hovered.v] : '';
+        hovered = h;
+        if (h) h.el.style.fill = PALETTE[(h.v + 1) % PALETTE.length];
+    }
+
     function paint() {
         raf = 0;
+        setHover(last && brush < 0 ? nearest(last) : null);
         for (const h of hexes) {
-            let o = h.v >= 0 ? PAINTED : h.base;
+            let o = h === hovered ? PAINTED : h.v >= 0 ? PAINTED : h.base;
             if (last) {
                 const t = Math.max(0, 1 - Math.hypot(h.cx - last.x, h.cy - last.y) / RADIUS);
                 o = Math.max(o, h.base + (GLOW - h.base) * t * t);
@@ -152,7 +125,6 @@ searchInput.addEventListener('input', () => {
         schedule();
     }
 
-    let brush = -1;
     hero.addEventListener('pointermove', e => {
         last = toSvg(e);
         if (brush >= 0 && last) {

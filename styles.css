@@ -72,33 +72,6 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 
 .topbar nav a:hover { background: var(--red-soft); color: var(--red); }
 
-.search-bar { position: relative; width: 210px; }
-
-.search-bar input {
-    width: 100%;
-    height: 38px;
-    padding: 0 38px 0 16px;
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    background: var(--surface);
-    color: var(--ink);
-    font: inherit;
-    font-size: .9rem;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-}
-
-.search-bar input:focus { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
-
-.search-bar i {
-    position: absolute;
-    right: 15px;
-    top: 12px;
-    font-size: .85rem;
-    color: var(--muted);
-    pointer-events: none;
-}
-
 /* Hero */
 .hero {
     position: relative;
@@ -108,10 +81,11 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 
 .hexes {
     position: absolute;
-    right: -40px;
+    right: -30px;
     top: 50%;
     transform: translateY(-50%);
-    width: 570px;
+    height: calc(100% - 36px);
+    width: auto;
     max-width: 90vw;
 }
 
@@ -278,7 +252,6 @@ main { padding: 0 var(--gutter) 56px; }
 .facts span { color: var(--muted); font-size: .92rem; }
 .chips.big li { font-size: .88rem; padding: 5px 14px; color: var(--ink); }
 
-.no-results { padding: 60px 0; text-align: center; color: var(--muted); }
 
 footer {
     padding: 40px var(--gutter) 56px;
@@ -296,16 +269,7 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 @media (max-width: 760px) {
     .topbar { flex-wrap: wrap; padding: 10px 16px; gap: 8px 16px; }
     .topbar nav { order: 3; flex-basis: 100%; }
-    .search-bar { width: auto; flex: 1; }
-    .hero { padding: 40px 20px 36px; }
-    .hexes { right: -240px; opacity: .6; }
-    main { padding: 0 20px 32px; }
-    :root { --gutter: 20px; }
-    .category { padding-top: 60px; }
-    .grid, .grid.projects { grid-template-columns: 1fr; }
-}
-
-@media (prefers-reduced-motion: reduce) {
+    @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .card, .btn, .map-card .thumb img { transition: none; }
     .card:hover, .btn:hover { transform: none; }
