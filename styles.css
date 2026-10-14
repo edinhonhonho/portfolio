@@ -51,11 +51,10 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 
 .brand::before {
     content: '';
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+    width: 16px;
+    height: 18px;
     background: var(--red);
-    box-shadow: 0 0 0 4px var(--red-soft);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
 .topbar nav {
@@ -395,3 +394,11 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 .subgroup:last-child { margin-bottom: 0; }
 .subhead { font-size: 1.25rem; }
 .subdesc { color: var(--muted); margin: 4px 0 20px; }
+
+/* Interactive hero hexagons */
+.hexes { pointer-events: none; }
+.hexes polygon { transition: opacity .25s, fill .25s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .hexes polygon { transition: none; }
+}

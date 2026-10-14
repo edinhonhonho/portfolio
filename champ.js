@@ -6,13 +6,9 @@
     const root = document.getElementById('champ-map');
     if (!root || typeof L === 'undefined') return;
 
-    const COLORS = ['#987db7', '#96bd3c', '#e6d20f', '#f3ad00', '#ea670f', '#ec1a37'];
-    const CITIES = {
-        serra: 'Serra (ES)', contagem: 'Contagem (MG)', maranguape: 'Maranguape (CE)',
-        belem: 'Belém (PA)', salvador: 'Salvador (BA)'
-    };
+    // Class 0 (no exposure) is light grey; 1-5 follow the QGIS ramp
+    const COLORS = ['#d3d3d0', '#96bd3c', '#e6d20f', '#f3ad00', '#ea670f', '#ec1a37'];
     const LAYERS = {
-        sintese: { label: 'Mapa síntese', breaks: [0, 0.4, 0.8, 1.2, 1.6, 2.0], unit: 'Pontuação de co-ocorrência' },
         alagamento: { label: 'Alagamentos', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
         deslizamento: { label: 'Deslizamentos de terra', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
         inundacao: { label: 'Inundações', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
@@ -49,7 +45,7 @@
     const ctx = canvas.getContext('2d');
     const tip = document.getElementById('champ-tip');
 
-    let city = null, layer = 'sintese', data = null, grid = null, vals = null, classes = null, raf = 0;
+    let city = null, layer = 'alagamento', data = null, grid = null, vals = null, classes = null, raf = 0;
     const cache = {};
 
     function buildGrid() {
@@ -189,7 +185,7 @@
         try {
             if (!cache[name]) cache[name] = await (await fetch('data/champ/' + name + '.json')).json();
             data = cache[name]; city = name;
-            if (!data.layers[layer]) layer = 'sintese';
+            if (!data.layers[layer]) layer = 'alagamento';
             buildGrid(); setLayer(); hoverIdx = -1; tip.hidden = true;
             lockToCity();
             status.textContent = '';
