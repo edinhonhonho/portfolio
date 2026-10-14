@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/164674da4c.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -232,6 +233,36 @@
         <div><h2>Análises espaciais</h2><p>Do dado bruto ao território: espacialização, indicadores e índices para apoiar decisões de cidades.</p></div>
       </header>
       <div class="grid ">
+        <article class="card champ-card" id="champ-map">
+          <div class="champ-head">
+            <p class="kind">Mapa interativo</p>
+            <h3>Diagnósticos do Mutirão Brasil / CHAMP</h3>
+            <p>Exposição a ameaças climáticas e síntese de co-ocorrência em grade hexagonal H3, para cinco cidades. Passe o mouse sobre um hexágono para ver o valor.</p>
+          </div>
+          <div class="champ-controls">
+            <div id="champ-cities" class="seg" role="group" aria-label="Cidade">
+              <button type="button" data-city="serra" aria-pressed="true">Serra</button>
+              <button type="button" data-city="contagem" aria-pressed="false">Contagem</button>
+              <button type="button" data-city="maranguape" aria-pressed="false">Maranguape</button>
+              <button type="button" data-city="belem" aria-pressed="false">Belém</button>
+              <button type="button" data-city="salvador" aria-pressed="false">Salvador</button>
+            </div>
+            <div id="champ-layers" class="seg" role="group" aria-label="Camada">
+              <button type="button" data-layer="sintese" aria-pressed="true">Mapa síntese</button>
+              <button type="button" data-layer="alagamento" aria-pressed="false">Alagamentos</button>
+              <button type="button" data-layer="deslizamento" aria-pressed="false">Deslizamentos</button>
+              <button type="button" data-layer="inundacao" aria-pressed="false">Inundações</button>
+              <button type="button" data-layer="calor" aria-pressed="false">Ondas de calor</button>
+            </div>
+          </div>
+          <div class="champ-stage">
+            <div id="champ-leaflet" role="img" aria-label="Mapa interativo de hexágonos com a exposição a ameaças climáticas"></div>
+            <div id="champ-tip" class="champ-tip" hidden></div>
+            <div id="champ-legend" class="champ-legend"></div>
+            <p id="champ-status" class="champ-status" role="status"></p>
+          </div>
+          <p class="ctx">Trabalho realizado para o WRI Brasil / Mutirão Brasil – CHAMP. Elaboração: Edson Vargas Guimarães. Mapa-base: Esri, HERE, Garmin e colaboradores do OpenStreetMap.</p>
+        </article>
         <article class="card work-card">
           <p class="kind">Segurança viária</p>
           <h3>Velocidade viária em cinco cidades</h3>
@@ -400,6 +431,8 @@
     <p>© Edson Vargas Guimarães · <a href="mailto:edsonvargas125@gmail.com">edsonvargas125@gmail.com</a></p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="champ.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
