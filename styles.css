@@ -109,22 +109,23 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 .hero {
     position: relative;
     overflow: hidden;
-    padding: 120px 40px 96px;
+    padding: 120px 40px 72px;
 }
 
-.contours {
+.hexes {
     position: absolute;
-    right: -80px;
-    top: -30px;
+    right: -60px;
+    top: -10px;
     width: 640px;
     max-width: 90vw;
-    fill: none;
-    stroke: var(--red);
-    stroke-width: 1;
-    opacity: .16;
 }
 
-.contours path:nth-child(5n) { stroke: var(--gold); stroke-width: 1.6; opacity: 1; }
+.hexes polygon { fill: var(--red); }
+.hexes .l1 { opacity: .07; }
+.hexes .l2 { opacity: .13; }
+.hexes .l3 { opacity: .22; }
+.hexes .l4 { opacity: .34; }
+.hexes .gold { fill: var(--gold); opacity: .55; }
 
 .hero-text { position: relative; max-width: 1120px; margin: 0 auto; }
 
@@ -165,12 +166,6 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 .btn:hover { border-color: var(--ink); transform: translateY(-1px); }
 .btn.primary { background: var(--red); border-color: var(--red); color: #fff; }
 .btn.primary:hover { background: #b9141e; border-color: #b9141e; }
-
-.stats { display: flex; flex-wrap: wrap; gap: 16px 56px; margin-top: 64px; }
-
-.stats dt { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-.stats dt::after { content: ''; display: block; width: 24px; height: 3px; margin-top: 10px; border-radius: 2px; background: var(--gold); }
-.stats dd { color: var(--muted); font-size: .9rem; margin-top: 8px; max-width: 16ch; }
 
 /* Sections */
 main { max-width: 1120px; margin: 0 auto; padding: 0 40px 56px; }
@@ -308,7 +303,7 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .topbar nav { order: 3; flex-basis: 100%; }
     .search-bar { width: auto; flex: 1; }
     .hero { padding: 64px 20px 56px; }
-    .contours { right: -240px; opacity: .12; }
+    .hexes { right: -240px; opacity: .6; }
     main { padding: 0 20px 32px; }
     .category { padding-top: 60px; }
     .grid, .grid.projects { grid-template-columns: 1fr; }
@@ -318,4 +313,79 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     html { scroll-behavior: auto; }
     .card, .btn, .map-card .thumb img { transition: none; }
     .card:hover, .btn:hover { transform: none; }
+}
+
+/* CHAMP interactive map */
+.champ-card { grid-column: 1 / -1; padding: 24px; gap: 16px; }
+.champ-card .champ-head p:not(.kind) { color: #4a4541; max-width: 70ch; margin-top: 6px; }
+.champ-card h3 { font-size: 1.4rem; margin-top: 6px; }
+
+.champ-controls { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.seg button {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: .88rem;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+.seg button:hover:not(:disabled) { border-color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+.seg button:disabled { opacity: .35; cursor: not-allowed; }
+.seg button:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+.champ-stage { position: relative; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+#champ-leaflet { height: 520px; background: #eceae5; z-index: 0; }
+.champ-canvas { position: absolute; inset: 0; z-index: 450; pointer-events: none; }
+
+.champ-tip {
+    position: absolute;
+    z-index: 700;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(28, 26, 25, .92);
+    color: #fff;
+    font-size: .82rem;
+    line-height: 1.4;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.champ-legend {
+    position: absolute;
+    left: 12px;
+    bottom: 28px;
+    z-index: 600;
+    display: grid;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .94);
+    font-size: .78rem;
+}
+
+.champ-legend .legend-title { font-weight: 700; margin-bottom: 2px; font-size: .8rem; color: var(--ink); }
+.champ-legend span { display: flex; align-items: center; gap: 8px; }
+.champ-legend i { width: 16px; height: 12px; border-radius: 3px; }
+
+.champ-status { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 700; font-size: .85rem; color: var(--muted); background: rgba(255,255,255,.9); padding: 2px 12px; border-radius: 12px; }
+.champ-status:empty { display: none; }
+
+@media (max-width: 760px) {
+    #champ-leaflet { height: 420px; }
+    .champ-card { padding: 16px; }
+}
+
+@media (max-width: 760px) {
+    .champ-legend { grid-template-columns: repeat(2, auto); column-gap: 14px; padding: 8px 10px; }
+    .champ-legend .legend-title { grid-column: 1 / -1; }
 }

@@ -1,0 +1,189 @@
+// Interactive hexagon map for the CHAMP spatial diagnostics.
+// Data: data/champ/<city>.json — hexagon centres (x/y in 1e-5° from `origin`),
+// one shared hexagon template per city (`tpl`, in degrees) and one value array
+// per layer (value × 100, -1 = no data).
+(function () {
+    const root = document.getElementById('champ-map');
+    if (!root || typeof L === 'undefined') return;
+
+    const COLORS = ['#987db7', '#96bd3c', '#e6d20f', '#f3ad00', '#ea670f', '#ec1a37'];
+    const CITIES = {
+        serra: 'Serra (ES)', contagem: 'Contagem (MG)', maranguape: 'Maranguape (CE)',
+        belem: 'Belém (PA)', salvador: 'Salvador (BA)'
+    };
+    const LAYERS = {
+        sintese: { label: 'Mapa síntese', breaks: [0, 0.4, 0.8, 1.2, 1.6, 2.0], unit: 'Pontuação de co-ocorrência' },
+        alagamento: { label: 'Alagamentos', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
+        deslizamento: { label: 'Deslizamentos de terra', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
+        inundacao: { label: 'Inundações', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' },
+        calor: { label: 'Ondas de calor', breaks: [0, 1, 2, 3, 4, 5], unit: 'Exposição' }
+    };
+
+    const fmt = n => String(n).replace('.', ',');
+    // QGIS graduated classes: 0 alone, then (lower, upper] ranges
+    function classOf(v, breaks) {
+        if (v < 0) return -1;
+        if (v === 0) return 0;
+        for (let i = 1; i < breaks.length; i++) if (v <= breaks[i] + 1e-9) return i;
+        return breaks.length - 1;
+    }
+
+    const map = L.map('champ-leaflet', { zoomControl: true, minZoom: 8, maxZoom: 17 });
+    const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+    L.tileLayer(ESRI + 'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+        maxNativeZoom: 16, maxZoom: 17
+    }).addTo(map);
+    // Labels sit above the hexagon canvas (z-index 450)
+    map.createPane('labels').style.zIndex = 460;
+    map.getPane('labels').style.pointerEvents = 'none';
+    L.tileLayer(ESRI + 'World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        pane: 'labels', maxNativeZoom: 16, maxZoom: 17
+    }).addTo(map);
+
+    const canvas = document.createElement('canvas');
+    canvas.className = 'champ-canvas';
+    map.getContainer().appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    const tip = document.getElementById('champ-tip');
+
+    let city = null, layer = 'sintese', data = null, grid = null, vals = null, classes = null, raf = 0;
+    const cache = {};
+
+    function buildGrid() {
+        grid = new Map();
+        const n = data.x.length;
+        for (let i = 0; i < n; i++) {
+            const k = Math.floor(data.x[i] / 100) + ',' + Math.floor(data.y[i] / 100);
+            (grid.get(k) || grid.set(k, []).get(k)).push(i);
+        }
+    }
+
+    function setLayer() {
+        const def = LAYERS[layer];
+        vals = data.layers[layer];
+        classes = vals.map(v => classOf(v / 100, def.breaks));
+    }
+
+    function draw() {
+        raf = 0;
+        const size = map.getSize(), dpr = window.devicePixelRatio || 1;
+        if (canvas.width !== size.x * dpr || canvas.height !== size.y * dpr) {
+            canvas.width = size.x * dpr; canvas.height = size.y * dpr;
+            canvas.style.width = size.x + 'px'; canvas.style.height = size.y + 'px';
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, size.x, size.y);
+        if (!data) return;
+
+        const z = map.getZoom(), sx = 256 * Math.pow(2, z) / 360;
+        const [ox, oy] = data.origin;
+        const sy = sx / Math.cos(oy * Math.PI / 180);
+        const tpl = data.tpl.map(p => [p[0] * sx, -p[1] * sy]);
+        const o = map.latLngToContainerPoint([oy, ox]);
+        const kx = sx * 1e-5, ky = -sy * 1e-5;
+        const pad = 60, n = data.x.length;
+        const hover = hoverIdx;
+
+        for (let c = 0; c < COLORS.length; c++) {
+            ctx.fillStyle = ctx.strokeStyle = COLORS[c];
+            ctx.globalAlpha = 0.82;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            for (let i = 0; i < n; i++) {
+                if (classes[i] !== c) continue;
+                const px = o.x + data.x[i] * kx, py = o.y + data.y[i] * ky;
+                if (px < -pad || py < -pad || px > size.x + pad || py > size.y + pad) continue;
+                ctx.moveTo(px + tpl[0][0], py + tpl[0][1]);
+                for (let k = 1; k < 6; k++) ctx.lineTo(px + tpl[k][0], py + tpl[k][1]);
+                ctx.closePath();
+            }
+            ctx.fill(); ctx.stroke();
+        }
+        if (hover >= 0) {
+            const px = o.x + data.x[hover] * kx, py = o.y + data.y[hover] * ky;
+            ctx.globalAlpha = 1; ctx.strokeStyle = '#1c1a19'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(px + tpl[0][0], py + tpl[0][1]);
+            for (let k = 1; k < 6; k++) ctx.lineTo(px + tpl[k][0], py + tpl[k][1]);
+            ctx.closePath(); ctx.stroke();
+        }
+    }
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(draw); };
+    map.on('move zoom resize', schedule);
+
+    let hoverIdx = -1;
+    map.on('mousemove', e => {
+        if (!data) return;
+        const x = Math.round((e.latlng.lng - data.origin[0]) * 1e5);
+        const y = Math.round((e.latlng.lat - data.origin[1]) * 1e5);
+        const bx = Math.floor(x / 100), by = Math.floor(y / 100);
+        let best = -1, bd = Infinity;
+        const r = Math.max(...data.tpl.map(p => Math.abs(p[0]))) * 1e5 * 0.9;
+        for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) {
+            const cell = grid.get((bx + i) + ',' + (by + j));
+            if (!cell) continue;
+            for (const idx of cell) {
+                const d = Math.hypot(data.x[idx] - x, (data.y[idx] - y) * 0.9);
+                if (d < bd) { bd = d; best = idx; }
+            }
+        }
+        if (best < 0 || bd > r) best = -1;
+        if (best !== hoverIdx) { hoverIdx = best; schedule(); }
+        if (best < 0 || classes[best] < 0) { tip.hidden = true; return; }
+        const def = LAYERS[layer];
+        tip.innerHTML = '<b>' + def.label + '</b><br>' + def.unit + ': ' + fmt((vals[best] / 100).toFixed(2).replace(/\.?0+$/, ''));
+        tip.style.left = (e.containerPoint.x + 14) + 'px';
+        tip.style.top = (e.containerPoint.y + 14) + 'px';
+        tip.hidden = false;
+    });
+    map.on('mouseout', () => { hoverIdx = -1; tip.hidden = true; schedule(); });
+
+    const cityBtns = document.getElementById('champ-cities');
+    const layerBtns = document.getElementById('champ-layers');
+    const legend = document.getElementById('champ-legend');
+    const status = document.getElementById('champ-status');
+
+    function renderControls() {
+        layerBtns.querySelectorAll('button').forEach(b => {
+            const has = data && data.layers[b.dataset.layer];
+            b.disabled = !has;
+            b.setAttribute('aria-pressed', String(b.dataset.layer === layer));
+        });
+        cityBtns.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.city === city)));
+        const def = LAYERS[layer];
+        legend.innerHTML = '<p class="legend-title">' + def.label + '</p>' + def.breaks.map((b, i) => {
+            const text = i === 0 ? '0' : fmt(def.breaks[i - 1]) + ' – ' + fmt(b);
+            return '<span><i style="background:' + COLORS[i] + '"></i>' + text + '</span>';
+        }).join('');
+    }
+
+    async function showCity(name, keepView) {
+        status.textContent = 'Carregando…';
+        try {
+            if (!cache[name]) cache[name] = await (await fetch('data/champ/' + name + '.json')).json();
+            data = cache[name]; city = name;
+            if (!data.layers[layer]) layer = 'sintese';
+            buildGrid(); setLayer(); hoverIdx = -1; tip.hidden = true;
+            if (!keepView) map.fitBounds(data.bounds, { padding: [20, 20] });
+            status.textContent = '';
+            renderControls(); schedule();
+        } catch (err) {
+            status.textContent = 'Não foi possível carregar o mapa.';
+        }
+    }
+
+    cityBtns.addEventListener('click', e => { const b = e.target.closest('button'); if (b) showCity(b.dataset.city); });
+    layerBtns.addEventListener('click', e => {
+        const b = e.target.closest('button');
+        if (!b || b.disabled) return;
+        layer = b.dataset.layer; setLayer(); renderControls(); schedule();
+    });
+
+    // Load lazily when the map scrolls into view
+    const start = () => { map.invalidateSize(); showCity('serra'); };
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '300px' });
+        io.observe(root);
+    } else start();
+})();
