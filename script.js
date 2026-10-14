@@ -1,36 +1,29 @@
-let cards = document.querySelectorAll('.card');
-let sections = document.querySelectorAll('.category');
-let groups = document.querySelectorAll('.subgroup');
+const cards = document.querySelectorAll('.card');
+const sections = document.querySelectorAll('.category');
+const searchInput = document.getElementById('searchbox');
+const noResults = document.getElementById('noresults');
 
 function liveSearch() {
-    let search_query = document.getElementById("searchbox").value.toLowerCase();
+    const query = searchInput.value.trim().toLowerCase();
+    let total = 0;
 
     cards.forEach(card => {
-        let match = card.innerText.toLowerCase().includes(search_query);
-        card.style.display = match ? "flex" : "none";
-    });
-
-    // Hide sub-groups and sections with no visible cards
-    groups.forEach(group => {
-        let visible = [...group.querySelectorAll('.card')].some(c => c.style.display !== "none");
-        group.style.display = visible ? "" : "none";
+        const match = card.textContent.toLowerCase().includes(query);
+        card.hidden = !match;
+        if (match) total++;
     });
 
     sections.forEach(section => {
-        let hasCards = section.querySelector('.card') !== null;
-        let visible = hasCards
-            ? [...section.querySelectorAll('.card')].some(c => c.style.display !== "none")
-            : search_query === "";
-        section.style.display = visible ? "" : "none";
+        const hasCards = section.querySelector('.card') !== null;
+        const noMatch = hasCards ? !section.querySelector('.card:not([hidden])') : true;
+        section.hidden = query !== '' && noMatch;
     });
+
+    noResults.hidden = total > 0;
 }
 
-//A little delay
 let typingTimer;
-let typeInterval = 500;
-let searchInput = document.getElementById('searchbox');
-
-searchInput.addEventListener('keyup', () => {
+searchInput.addEventListener('input', () => {
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(liveSearch, typeInterval);
+    typingTimer = setTimeout(liveSearch, 250);
 });
