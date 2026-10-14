@@ -15,7 +15,10 @@
         const b = el.getBBox();
         el.style.transformBox = 'fill-box';
         el.style.transformOrigin = 'center';
-        return { el, cx: b.x + b.width / 2, cy: b.y + b.height / 2, base: parseFloat(getComputedStyle(el).opacity) || 0.1, v: -1, row: null };
+        // Implicit class on the scale, taken from the tint of the hexagon (l1..l4); gold ones sit in the middle
+        const cls = el.classList;
+        const own = cls.contains('gold') ? 2 : cls.contains('l4') ? 3 : cls.contains('l3') ? 2 : cls.contains('l2') ? 1 : 0;
+        return { el, cx: b.x + b.width / 2, cy: b.y + b.height / 2, base: parseFloat(getComputedStyle(el).opacity) || 0.1, v: -1, own, row: null };
     });
 
     // Rows: hexagons sharing the same vertical centre
@@ -36,6 +39,8 @@
         return m ? new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse()) : null;
     }
 
+    const level = h => (h.v >= 0 ? h.v : h.own);
+
     function nearest(pt) {
         let best = null, bd = Infinity;
         for (const h of hexes) {
@@ -45,24 +50,19 @@
         return bd < 28 ? best : null;
     }
 
-    // The hexagon under the pointer previews the next colour of the scale (what a click would paint)
-    let raf = 0, last = null, hovered = null, brush = -1;
-    function setHover(h) {
-        if (h === hovered) return;
-        if (hovered) hovered.el.style.fill = hovered.v >= 0 ? PALETTE[hovered.v] : '';
-        hovered = h;
-        if (h) h.el.style.fill = PALETTE[(h.v + 1) % PALETTE.length];
-    }
-
+    // Around the pointer every hexagon shows one class above its own on the colour scale (grey, green,
+    // yellow, orange...), strongest right under the pointer and fading with distance.
+    let raf = 0, last = null, brush = -1;
     function paint() {
         raf = 0;
-        setHover(last && brush < 0 ? nearest(last) : null);
+        const near = last && brush < 0;
+        const under = near ? nearest(last) : null;
         for (const h of hexes) {
-            let o = h === hovered ? PAINTED : h.v >= 0 ? PAINTED : h.base;
-            if (last) {
-                const t = Math.max(0, 1 - Math.hypot(h.cx - last.x, h.cy - last.y) / RADIUS);
-                o = Math.max(o, h.base + (GLOW - h.base) * t * t);
-            }
+            const t = near ? Math.max(0, 1 - Math.hypot(h.cx - last.x, h.cy - last.y) / RADIUS) : 0;
+            h.el.style.fill = t > 0.04 ? PALETTE[(level(h) + 1) % PALETTE.length] : (h.v >= 0 ? PALETTE[h.v] : '');
+            let o = h.v >= 0 ? PAINTED : h.base;
+            if (t > 0) o = Math.max(o, h.base + (GLOW - h.base) * t * t);
+            if (h === under) o = PAINTED;
             h.el.style.opacity = o.toFixed(3);
         }
     }
@@ -139,7 +139,7 @@
         const pt = toSvg(e);
         const h = pt && nearest(pt);
         if (!h) return;
-        brush = (h.v + 1) % PALETTE.length;
+        brush = (level(h) + 1) % PALETTE.length;
         hero.classList.add('dragging');
         paintHex(h, brush);
         last = pt;
