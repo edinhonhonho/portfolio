@@ -292,3 +292,100 @@ footer a {
     }
     
 }
+
+/* Portfolio: hero, categories and sections */
+header .hero {
+    text-align: center;
+    margin-top: 20px;
+}
+
+header .hero h1 {
+    font-size: 2rem;
+}
+
+header .hero p {
+    color: var(--background-middle-contrast);
+    margin-top: 4px;
+}
+
+header .categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+header .categories a {
+    padding: 6px 14px;
+    border: solid 1px var(--outline);
+    border-radius: 20px;
+    color: var(--link);
+    text-decoration: none;
+}
+
+header .categories a:hover {
+    border-color: var(--link);
+}
+
+main .category {
+    margin-bottom: 40px;
+    scroll-margin-top: 20px;
+}
+
+main .category h2 {
+    font-size: 1.6rem;
+    padding-bottom: 6px;
+    border-bottom: solid 1px var(--outline);
+}
+
+main .category h2 i {
+    margin-right: 8px;
+    color: var(--link);
+}
+
+main .category .intro {
+    color: var(--background-middle-contrast);
+    margin: 8px 0 20px;
+}
+
+main .subgroup h3 {
+    font-size: 1.2rem;
+    color: var(--color-6);
+}
+
+main .subgroup .desc {
+    color: var(--background-middle-contrast);
+    margin: 2px 0 14px;
+}
+
+main .subgroup {
+    margin-bottom: 10px;
+}
+
+main .empty {
+    color: var(--background-middle-contrast);
+    font-style: italic;
+}
+
+/* Cards without map image */
+main .card.no-image {
+    height: auto;
+}
+
+main .card.no-image .map-info {
+    width: 100%;
+    border: solid 1px var(--outline);
+    border-radius: 15px;
+}
+
+main .card .map-info .text {
+    margin-top: 8px;
+}
+
+@media (max-width:700px) {
+    main .card.no-image .map-info {
+        width: calc(100% - 22px);
+        border-radius: 15px;
+    }
+}
