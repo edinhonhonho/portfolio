@@ -28,7 +28,8 @@
         return breaks.length - 1;
     }
 
-    const map = L.map('champ-leaflet', { zoomControl: true, minZoom: 8, maxZoom: 17 });
+    // No zoom animation: the canvas is redrawn instantly, so hexagons never lag behind the tiles
+    const map = L.map('champ-leaflet', { zoomControl: true, zoomAnimation: false, maxBoundsViscosity: 1, minZoom: 5, maxZoom: 16 });
     const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
     L.tileLayer(ESRI + 'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
@@ -43,6 +44,7 @@
 
     const canvas = document.createElement('canvas');
     canvas.className = 'champ-canvas';
+    canvas.style.opacity = '0.82';
     map.getContainer().appendChild(canvas);
     const ctx = canvas.getContext('2d');
     const tip = document.getElementById('champ-tip');
@@ -65,6 +67,20 @@
         classes = vals.map(v => classOf(v / 100, def.breaks));
     }
 
+    // First index in sorted array `arr` with value >= v
+    function lowerBound(arr, v) {
+        let lo = 0, hi = arr.length;
+        while (lo < hi) { const m = (lo + hi) >> 1; if (arr[m] < v) lo = m + 1; else hi = m; }
+        return lo;
+    }
+
+    // closePath() is very slow on paths with thousands of sub-paths; fill() closes each polygon anyway
+    function hexPath(path, px, py, tpl, close) {
+        path.moveTo(px + tpl[0][0], py + tpl[0][1]);
+        for (let k = 1; k < 6; k++) path.lineTo(px + tpl[k][0], py + tpl[k][1]);
+        if (close) path.closePath();
+    }
+
     function draw() {
         raf = 0;
         const size = map.getSize(), dpr = window.devicePixelRatio || 1;
@@ -79,34 +95,32 @@
         const z = map.getZoom(), sx = 256 * Math.pow(2, z) / 360;
         const [ox, oy] = data.origin;
         const sy = sx / Math.cos(oy * Math.PI / 180);
-        const tpl = data.tpl.map(p => [p[0] * sx, -p[1] * sy]);
+        // Template drawn 3% larger so neighbouring hexagons overlap and leave no seams
+        const tpl = data.tpl.map(p => [p[0] * sx * 1.03, -p[1] * sy * 1.03]);
         const o = map.latLngToContainerPoint([oy, ox]);
         const kx = sx * 1e-5, ky = -sy * 1e-5;
-        const pad = 60, n = data.x.length;
-        const hover = hoverIdx;
+        const pad = 40;
 
-        for (let c = 0; c < COLORS.length; c++) {
-            ctx.fillStyle = ctx.strokeStyle = COLORS[c];
-            ctx.globalAlpha = 0.82;
-            ctx.lineWidth = 0.6;
-            ctx.beginPath();
-            for (let i = 0; i < n; i++) {
-                if (classes[i] !== c) continue;
-                const px = o.x + data.x[i] * kx, py = o.y + data.y[i] * ky;
-                if (px < -pad || py < -pad || px > size.x + pad || py > size.y + pad) continue;
-                ctx.moveTo(px + tpl[0][0], py + tpl[0][1]);
-                for (let k = 1; k < 6; k++) ctx.lineTo(px + tpl[k][0], py + tpl[k][1]);
-                ctx.closePath();
-            }
-            ctx.fill(); ctx.stroke();
+        // Rows are sorted by y, so only the visible band is visited
+        const hh = Math.max(...data.tpl.map(p => Math.abs(p[1]))) * 1e5;
+        const yTop = (map.containerPointToLatLng([0, -pad]).lat - oy) * 1e5 + hh;
+        const yBottom = (map.containerPointToLatLng([0, size.y + pad]).lat - oy) * 1e5 - hh;
+        const lo = lowerBound(data.y, yBottom), hi = lowerBound(data.y, yTop);
+
+        const paths = COLORS.map(() => new Path2D());
+        for (let i = lo; i < hi; i++) {
+            const c = classes[i];
+            if (c < 0) continue;
+            const px = o.x + data.x[i] * kx;
+            if (px < -pad || px > size.x + pad) continue;
+            hexPath(paths[c], px, o.y + data.y[i] * ky, tpl);
         }
-        if (hover >= 0) {
-            const px = o.x + data.x[hover] * kx, py = o.y + data.y[hover] * ky;
-            ctx.globalAlpha = 1; ctx.strokeStyle = '#1c1a19'; ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(px + tpl[0][0], py + tpl[0][1]);
-            for (let k = 1; k < 6; k++) ctx.lineTo(px + tpl[k][0], py + tpl[k][1]);
-            ctx.closePath(); ctx.stroke();
+        for (let c = 0; c < COLORS.length; c++) { ctx.fillStyle = COLORS[c]; ctx.fill(paths[c]); }
+
+        if (hoverIdx >= 0) {
+            const hp = new Path2D();
+            hexPath(hp, o.x + data.x[hoverIdx] * kx, o.y + data.y[hoverIdx] * ky, tpl, true);
+            ctx.strokeStyle = '#1c1a19'; ctx.lineWidth = 2; ctx.stroke(hp);
         }
     }
     const schedule = () => { if (!raf) raf = requestAnimationFrame(draw); };
@@ -158,14 +172,26 @@
         }).join('');
     }
 
-    async function showCity(name, keepView) {
+    // Fit the city, then lock panning and zooming to it
+    function lockToCity() {
+        const b = L.latLngBounds(data.bounds);
+        map.setMaxBounds(null);
+        map.setMinZoom(1);
+        map.fitBounds(b, { padding: [20, 20], animate: false });
+        const z = map.getZoom();
+        map.setMinZoom(z);
+        map.setMaxZoom(Math.min(16, z + 3));
+        map.setMaxBounds(b.pad(0.12));
+    }
+
+    async function showCity(name) {
         status.textContent = 'Carregando…';
         try {
             if (!cache[name]) cache[name] = await (await fetch('data/champ/' + name + '.json')).json();
             data = cache[name]; city = name;
             if (!data.layers[layer]) layer = 'sintese';
             buildGrid(); setLayer(); hoverIdx = -1; tip.hidden = true;
-            if (!keepView) map.fitBounds(data.bounds, { padding: [20, 20] });
+            lockToCity();
             status.textContent = '';
             renderControls(); schedule();
         } catch (err) {

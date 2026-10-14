@@ -1,5 +1,6 @@
 const cards = document.querySelectorAll('.card');
 const sections = document.querySelectorAll('.category');
+const groups = document.querySelectorAll('.subgroup');
 const searchInput = document.getElementById('searchbox');
 const noResults = document.getElementById('noresults');
 
@@ -11,6 +12,10 @@ function liveSearch() {
         const match = card.textContent.toLowerCase().includes(query);
         card.hidden = !match;
         if (match) total++;
+    });
+
+    groups.forEach(group => {
+        group.hidden = query !== '' && !group.querySelector('.card:not([hidden])');
     });
 
     sections.forEach(section => {

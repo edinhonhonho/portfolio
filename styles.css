@@ -389,3 +389,9 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .champ-legend { grid-template-columns: repeat(2, auto); column-gap: 14px; padding: 8px 10px; }
     .champ-legend .legend-title { grid-column: 1 / -1; }
 }
+
+/* Sub-groups inside a section */
+.subgroup { margin-bottom: 56px; }
+.subgroup:last-child { margin-bottom: 0; }
+.subhead { font-size: 1.25rem; }
+.subdesc { color: var(--muted); margin: 4px 0 20px; }
