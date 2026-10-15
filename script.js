@@ -1,3 +1,36 @@
+// Masonry: each column gets the next card in order, always into the shortest column,
+// so the gap between cards stays the same whatever their heights.
+(function () {
+    const boxes = [...document.querySelectorAll('.masonry')];
+    if (!boxes.length) return;
+    const GAP = 24, MIN = 300;
+    boxes.forEach(b => { b._items = [...b.children]; });
+
+    function layout(box) {
+        const n = Math.max(1, Math.min(box._items.length, Math.floor((box.clientWidth + GAP) / (MIN + GAP))));
+        box.classList.add('masonry-on');
+        box.replaceChildren();
+        const cols = Array.from({ length: n }, () => {
+            const col = document.createElement('div');
+            col.className = 'masonry-col';
+            box.appendChild(col);
+            return col;
+        });
+        for (const item of box._items) {
+            let best = cols[0];
+            for (const col of cols) if (col.offsetHeight < best.offsetHeight) best = col;
+            best.appendChild(item);
+        }
+    }
+
+    const all = () => boxes.forEach(layout);
+    let timer;
+    window.addEventListener('resize', () => { clearTimeout(timer); timer = setTimeout(all, 120); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(all);
+    window.addEventListener('load', all);
+    all();
+})();
+
 // Interactive hexagons in the hero. Every hexagon sits on a class of the legend scale (grey, green,
 // yellow, amber, orange, red). Under the pointer the hexagons show ONE class above their own;
 // a click (or drag) paints them with that class. A row painted in a single class sets off a wave.
@@ -7,8 +40,9 @@
     if (!svg) return;
 
     const NS = 'http://www.w3.org/2000/svg';
-    const PALETTE = ['#d3d3d0', '#96bd3c', '#e6d20f', '#f3ad00', '#ea670f', '#ec1a37'];
-    const REST = 0.9;
+    // The pastel scale comes from the markup, so the page and the script share one source
+    const PALETTE = (svg.dataset.palette || '#d3d3d0,#96bd3c,#e6d20f,#f3ad00,#ea670f,#ec1a37').split(',');
+    const REST = 0.96;
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const next = l => (l + 1) % PALETTE.length;
 
@@ -83,7 +117,7 @@
             const delay = i * 80;
             h.el.animate([
                 { transform: 'scale(1) rotate(0deg)', fill: color, opacity: REST },
-                { transform: 'scale(1.4) rotate(30deg)', fill: '#fff3b0', opacity: 1, offset: 0.45 },
+                { transform: 'scale(1.4) rotate(30deg)', fill: '#ffffff', opacity: 1, offset: 0.45 },
                 { transform: 'scale(1) rotate(60deg)', fill: color, opacity: REST }
             ], { duration: 800, delay, easing: 'cubic-bezier(.3,1.4,.5,1)' });
 
@@ -93,7 +127,7 @@
                 g.setAttribute('transform', `translate(${h.cx.toFixed(1)} ${h.cy.toFixed(1)})`);
                 const p = document.createElementNS(NS, 'polygon');
                 p.setAttribute('points', hexPoints(5 + Math.random() * 8));
-                p.style.fill = k % 3 === 2 ? '#e9b72e' : color;
+                p.style.fill = k % 3 === 2 ? PALETTE[3] : color;
                 p.style.opacity = '0';
                 g.appendChild(p);
                 fx.appendChild(g);

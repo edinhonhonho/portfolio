@@ -393,3 +393,20 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 .prints a:hover { border-color: #cfc8b8; box-shadow: 0 8px 24px rgba(28, 26, 25, .08); }
 .prints img { display: block; width: 100%; height: auto; }
 .print-card .ctx { color: var(--muted); font-size: .83rem; }
+
+/* Masonry: cards keep their own height and the gap is always the same */
+.grid.masonry-on { display: flex; align-items: flex-start; gap: 24px; }
+.masonry-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+.masonry-col > .card { width: 100%; }
+
+/* Thematic maps: small, grouped by category */
+.maps { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.map-group { padding: 14px 16px 16px; gap: 12px; box-shadow: none; }
+.map-group:hover { transform: none; box-shadow: none; }
+.map-group h4 { font-size: .98rem; letter-spacing: -0.01em; }
+.map-group header p { color: var(--muted); font-size: .78rem; line-height: 1.4; margin-top: 2px; }
+.map-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tile { display: flex; flex-direction: column; gap: 5px; text-decoration: none; }
+.tile img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: left top; border: 1px solid var(--line); border-radius: 8px; background: #fff; transition: border-color .2s; }
+.tile:hover img { border-color: var(--red); }
+.tile span { font-size: .72rem; line-height: 1.25; color: var(--muted); }
