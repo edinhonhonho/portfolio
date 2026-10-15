@@ -44,7 +44,8 @@
     const PALETTE = (svg.dataset.palette || '#d3d3d0,#96bd3c,#e6d20f,#f3ad00,#ea670f,#ec1a37').split(',');
     const REST = 0.96;
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const next = l => (l + 1) % PALETTE.length;
+    // One class up, but never past the top class (it does not wrap back to grey)
+    const next = l => Math.min(l + 1, PALETTE.length - 1);
 
     const hexes = [...svg.querySelectorAll('polygon')].map(el => {
         const b = el.getBBox();

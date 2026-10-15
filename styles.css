@@ -410,3 +410,8 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 .tile img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: left top; border: 1px solid var(--line); border-radius: 8px; background: #fff; transition: border-color .2s; }
 .tile:hover img { border-color: var(--red); }
 .tile span { font-size: .72rem; line-height: 1.25; color: var(--muted); }
+
+/* Mobile screenshots inside a card */
+.prints-label { margin-top: 10px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+.prints.mobile { grid-template-columns: repeat(auto-fit, minmax(0, 210px)); justify-content: start; margin-top: 0; }
+.prints.mobile a { border-radius: 20px; }
