@@ -25,7 +25,7 @@
     }
 
     // No zoom animation: the canvas is redrawn instantly, so hexagons never lag behind the tiles
-    const map = L.map('champ-leaflet', { zoomControl: true, zoomAnimation: false, maxBoundsViscosity: 1, minZoom: 5, maxZoom: 16 });
+    const map = L.map('champ-leaflet', { zoomControl: true, zoomAnimation: false, zoomSnap: 0.25, maxBoundsViscosity: 1, minZoom: 5, maxZoom: 16 });
     const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
     L.tileLayer(ESRI + 'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
@@ -167,10 +167,17 @@
 
     // Fit the city, then lock panning and zooming to it
     function lockToCity() {
-        const b = L.latLngBounds(data.bounds);
+        // Extent of the hexagons themselves (the stored bounds are looser), so the city sits centred
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (let i = 0; i < data.x.length; i++) {
+            if (data.x[i] < x0) x0 = data.x[i]; if (data.x[i] > x1) x1 = data.x[i];
+            if (data.y[i] < y0) y0 = data.y[i]; if (data.y[i] > y1) y1 = data.y[i];
+        }
+        const [ox, oy] = data.origin;
+        const b = L.latLngBounds([oy + y0 * 1e-5, ox + x0 * 1e-5], [oy + y1 * 1e-5, ox + x1 * 1e-5]);
         map.setMaxBounds(null);
         map.setMinZoom(1);
-        map.fitBounds(b, { padding: [20, 20], animate: false });
+        map.fitBounds(b, { padding: [34, 34], animate: false });
         const z = map.getZoom();
         map.setMinZoom(z);
         map.setMaxZoom(Math.min(16, z + 3));

@@ -38,6 +38,41 @@
     const hero = document.querySelector('.hero');
     const svg = hero && hero.querySelector('.hexes');
     if (!svg) return;
+
+    // A new, spatially coherent classification on every load: a few random "hot spots" spread
+    // over the honeycomb, ranked and cut into classes with a bell-shaped share (few greys and
+    // few reds, most hexagons in the middle). Neighbours end up with similar classes.
+    (function randomise() {
+        const polys = [...svg.querySelectorAll('polygon')];
+        const pts = polys.map(el => { const b = el.getBBox(); return [b.x + b.width / 2, b.y + b.height / 2]; });
+        const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+        const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+        const span = Math.max(x1 - x0, y1 - y0);
+        const blobs = Array.from({ length: 3 + Math.floor(Math.random() * 2) }, () => ({
+            x: x0 + Math.random() * (x1 - x0), y: y0 + Math.random() * (y1 - y0),
+            r: span * (0.28 + Math.random() * 0.22), w: (Math.random() < 0.5 ? -1 : 1) * (0.6 + Math.random() * 0.6)
+        }));
+        const ang = Math.random() * Math.PI * 2, tilt = 0.5 * Math.random();
+        const score = pts.map(([x, y]) => {
+            let v = tilt * (((x - x0) * Math.cos(ang) + (y - y0) * Math.sin(ang)) / span);
+            for (const b of blobs) v += b.w * Math.exp(-(((x - b.x) ** 2 + (y - b.y) ** 2) / (2 * b.r * b.r)));
+            return v + (Math.random() - 0.5) * 0.18;
+        });
+        const order = score.map((v, i) => i).sort((a, b) => score[a] - score[b]);
+        const share = [0.07, 0.19, 0.28, 0.24, 0.15, 0.07];
+        const pal = (svg.dataset.palette || '').split(',');
+        let from = 0;
+        share.forEach((s, lvl) => {
+            const to = lvl === share.length - 1 ? order.length : from + Math.round(s * order.length);
+            for (let k = from; k < to; k++) {
+                const el = polys[order[k]];
+                el.dataset.l = lvl;
+                if (pal[lvl]) el.style.fill = pal[lvl];
+            }
+            from = to;
+        });
+    })();
+
     // On phones the honeycomb is only a background: no interaction
     if (window.matchMedia('(max-width: 760px)').matches) return;
 
