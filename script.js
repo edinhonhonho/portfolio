@@ -38,6 +38,8 @@
     const hero = document.querySelector('.hero');
     const svg = hero && hero.querySelector('.hexes');
     if (!svg) return;
+    // On phones the honeycomb is only a background: no interaction
+    if (window.matchMedia('(max-width: 760px)').matches) return;
 
     const NS = 'http://www.w3.org/2000/svg';
     // The pastel scale comes from the markup, so the page and the script share one source

@@ -263,7 +263,9 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .topbar nav { order: 3; flex-basis: 100%; }
     .hero { padding: 40px 20px 36px; }
     .hero { display: flex; flex-direction: column; }
-    .hexes { position: static; transform: none; order: 2; height: auto; width: min(82vw, 330px); max-width: none; margin: 28px auto 0; }
+    .hexes { position: absolute; top: 50%; left: 50%; right: auto; transform: translate(-50%, -50%); height: auto; width: min(118vw, 520px); max-width: none; margin: 0; opacity: .38; z-index: 0; }
+    .hero-text { z-index: 1; }
+    .hero .sub { color: #4a4a4a; }
     main { padding: 0 20px 32px; }
     :root { --gutter: 20px; }
     .category { padding-top: 60px; }
