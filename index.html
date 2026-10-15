@@ -82,31 +82,11 @@
       <div class="subgroup">
         <h3 class="subhead">Análises espaciais</h3>
         <p class="subdesc">Espacialização de dados, índices e geoprocessamento.</p>
-        <div class="grid masonry">
-        <article class="card work-card">
-          <p class="kind">Segurança viária</p>
-          <h3>Velocidade viária em cinco cidades</h3>
-          <p>Espacialização de dados de velocidade da Google Routes API em Serra, Salvador, Belém, Contagem e Maranguape.</p>
-          <ul class="chips"><li>Python</li><li>GeoPandas</li><li>QGIS</li></ul>
-          <p class="ctx">Mutirão Brasil / CHAMP · WRI Brasil</p>
-        </article>
-        <article class="card work-card">
-          <p class="kind">Segurança pública</p>
-          <h3>Distribuição de equipes de segurança</h3>
-          <p>Análises espaciais de indicadores criminais para apoiar a distribuição das equipes de segurança, com painéis e automação de planilhas.</p>
-          <ul class="chips"><li>Análise espacial</li><li>Indicadores criminais</li></ul>
-          <p class="ctx">SSP/RS · 2023–2024</p>
-        </article>
-        </div>
-      </div>
-      <div class="subgroup">
-        <h3 class="subhead">Aplicações e painéis interativos</h3>
-        <p class="subdesc">Mapas interativos, painéis e sistemas para explorar e processar dados.</p>
         <div class="grid ">
         <article class="card champ-card" id="champ-map">
           <div class="champ-head">
-            <h3>Aplicação de metodologia para análise de exposição climática e segurança viária</h3>
-            <p>Diagnóstico do Mutirão Brasil / CHAMP em grade hexagonal, para Serra, Contagem e Maranguape: exposição a alagamentos, deslizamentos, inundações e ondas de calor. Passe o mouse sobre um hexágono para ver o valor.</p>
+            <h3>Aplicação de metodologia para análise de exposição climática</h3>
+            <p>Diagnóstico do Mutirão Brasil / CHAMP em grade hexagonal, para Serra, Contagem e Maranguape: exposição a alagamentos, deslizamentos, inundações e ondas de calor. Passe o mouse ou toque em um hexágono para ver o valor.</p>
           </div>
           <div class="champ-controls">
             <div id="champ-cities" class="seg" role="group" aria-label="Cidade">
@@ -124,11 +104,25 @@
           <div class="champ-stage">
             <div id="champ-leaflet" role="img" aria-label="Mapa interativo de hexágonos: aplicação de metodologia para análise de exposição climática e segurança viária"></div>
             <div id="champ-tip" class="champ-tip" hidden></div>
-            <div id="champ-legend" class="champ-legend"></div>
             <p id="champ-status" class="champ-status" role="status"></p>
           </div>
           <p class="ctx">Trabalho realizado para o WRI Brasil / Mutirão Brasil – CHAMP. Elaboração: Edinho. Mapa-base: Esri, HERE, Garmin e colaboradores do OpenStreetMap.</p>
         </article>
+        </div>
+        <div class="grid masonry" style="margin-top: 24px">
+        <article class="card work-card">
+          <p class="kind">Segurança viária</p>
+          <h3>Velocidade média estimada de municípios</h3>
+          <p>Estimativa da velocidade média das vias de municípios a partir de dados da Google Routes API, tratados e espacializados em Python (GeoPandas) e QGIS, para Serra, Salvador, Belém, Contagem e Maranguape.</p>
+          <ul class="chips"><li>Python</li><li>GeoPandas</li><li>QGIS</li></ul>
+          <p class="ctx">Mutirão Brasil / CHAMP · WRI Brasil</p>
+        </article>
+        </div>
+      </div>
+      <div class="subgroup">
+        <h3 class="subhead">Aplicações e painéis interativos</h3>
+        <p class="subdesc">Painéis e sistemas para explorar e processar dados.</p>
+        <div class="grid ">
         <article class="card work-card print-card">
           <p class="kind">Aplicação web · acesso restrito</p>
           <h3>Repositório QualiÔnibus</h3>
@@ -162,14 +156,14 @@
         <article class="card work-card">
           <p class="kind">Relatório técnico</p>
           <h3>Diagnósticos de exposição climática e segurança viária</h3>
-          <p>Relatórios de diagnóstico para municípios do programa, entre eles Belém e Salvador, com o objetivo de identificar locais prioritários para a inclusão de soluções baseadas na natureza (SBNs).</p>
+          <p>Relatórios de diagnóstico de exposição climática e segurança viária para Serra, Salvador, Belém, Contagem e Maranguape, com o objetivo de identificar locais prioritários para a inclusão de soluções baseadas na natureza (SBNs).</p>
           <ul class="chips"><li>Relatório</li><li>Diagnóstico</li><li>SBNs</li></ul>
           <p class="ctx">Mutirão Brasil / CHAMP · WRI Brasil</p>
         </article>
         <article class="card work-card">
           <p class="kind">Publicação · ata de conferência</p>
           <h3>Ciclo de encontros sobre segurança viária e motocicletas</h3>
-          <p>Ata dos encontros com pesquisadores, especialistas, gestores públicos e motociclistas (nov/2025 a fev/2026) sobre fiscalização, organização dos motociclistas, regulação de plataformas e transporte coletivo como alternativa. Coautoria.</p>
+          <p>Achado dos encontros com pesquisadores, especialistas, gestores públicos e motociclistas (nov/2025 a fev/2026) sobre fiscalização, organização dos motociclistas, regulação de plataformas e transporte coletivo como alternativa.</p>
           <ul class="chips"><li>Iniciativa Bloomberg</li><li>Segurança viária</li><li>Motocicletas</li></ul>
           <p class="ctx">WRI Brasil · jul/2026</p>
           <div class="links"><a class="link" href="https://wribrasil.org.br/publicacoes/ciclo-encontros-seguranca-viaria-motocicletas"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a></div>
@@ -177,7 +171,7 @@
         <article class="card work-card">
           <p class="kind">Tradução · relatório</p>
           <h3>Segurança e infraestrutura viária urbana para motociclistas</h3>
-          <p>Tradução para o português, feita por mim, do relatório da WRI sobre como o ambiente viário urbano influencia lesões e mortes de motociclistas, com dados de seis cidades.</p>
+          <p>Tradução para o português, feita por mim, do relatório da WRI sobre como o ambiente viário urbano influencia lesões e mortes de motociclistas, com dados de seis cidades do Sul global.</p>
           <ul class="chips"><li>Segurança viária</li><li>Infraestrutura urbana</li><li>Motocicletas</li></ul>
           <p class="ctx">WRI Brasil · mai/2026</p>
           <div class="links"><a class="link" href="https://wribrasil.org.br/publicacoes/motociclistas-seguranca-infraestrutura-viaria-urbana"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a></div>
@@ -185,7 +179,7 @@
         <article class="card work-card">
           <p class="kind">Publicação · ata de conferência</p>
           <h3>Ciclo de debates sobre contratos de concessão do transporte coletivo por ônibus</h3>
-          <p>Registro dos debates com gestores, operadores e especialistas sobre inovações nos contratos de concessão do transporte coletivo.</p>
+          <p>Apoio na sistematização dos debates com gestores, operadores e especialistas sobre inovações nos contratos de concessão do transporte coletivo por ônibus.</p>
           <ul class="chips"><li>Transporte coletivo</li><li>Contratos de concessão</li></ul>
           <p class="ctx">WRI Brasil · ago/2025</p>
           <div class="links"><a class="link" href="https://www.wribrasil.org.br/publicacoes/ciclo-de-debates-sobre-contratos-de-concessao-do-transporte-coletivo-por-onibus"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a></div>
@@ -194,83 +188,89 @@
       </div>
       <div class="subgroup">
         <h3 class="subhead">Mapas temáticos</h3>
-        <p class="subdesc">Mapas produzidos em QGIS sobre geologia, segurança pública e população no Sul do Brasil.</p>
-        <div class="grid maps">
+        <p class="subdesc">Mapas produzidos em QGIS sobre transporte coletivo, geologia, demografia indígena e segurança pública. Mostrados em miniatura.</p>
+        <div class="grid maps featured">
+        <article class="card map-group featured">
+          <header><h4>Transporte coletivo · Porto Alegre</h4><p>Pontos de ônibus qualificados, grupos focais e renda familiar per capita</p></header>
+          <div class="map-tiles">
+            <figure class="tile" title="Porto Alegre: grupos focais e renda familiar per capita">
+              <img loading="lazy" draggable="false" src="mapas/poa-grupos-focais-thumb.webp" alt="Mapa: Porto Alegre: grupos focais e renda familiar per capita">
+              <span>Grupos focais</span>
+            </figure>
+            <figure class="tile" title="Porto Alegre: pontos de ônibus qualificados sobre imagem de satélite">
+              <img loading="lazy" draggable="false" src="mapas/poa-pontos-thumb.webp" alt="Mapa: Porto Alegre: pontos de ônibus qualificados sobre imagem de satélite">
+              <span>Pontos qualificados</span>
+            </figure>
+            <figure class="tile" title="Porto Alegre: pontos de ônibus qualificados e renda familiar per capita">
+              <img loading="lazy" draggable="false" src="mapas/poa-renda-pontos-thumb.webp" alt="Mapa: Porto Alegre: pontos de ônibus qualificados e renda familiar per capita">
+              <span>Pontos e renda</span>
+            </figure>
+          </div>
+        </article>
+        <article class="card map-group featured">
+          <header><h4>Transporte coletivo · Fortaleza</h4><p>Pontos de ônibus qualificados, grupos focais e renda familiar per capita</p></header>
+          <div class="map-tiles">
+            <figure class="tile" title="Fortaleza: grupos focais e renda familiar per capita">
+              <img loading="lazy" draggable="false" src="mapas/fortaleza-grupos-focais-thumb.webp" alt="Mapa: Fortaleza: grupos focais e renda familiar per capita">
+              <span>Grupos focais</span>
+            </figure>
+            <figure class="tile" title="Fortaleza: pontos de ônibus qualificados sobre imagem de satélite">
+              <img loading="lazy" draggable="false" src="mapas/fortaleza-pontos-thumb.webp" alt="Mapa: Fortaleza: pontos de ônibus qualificados sobre imagem de satélite">
+              <span>Pontos qualificados</span>
+            </figure>
+            <figure class="tile" title="Fortaleza: pontos de ônibus qualificados e renda familiar per capita">
+              <img loading="lazy" draggable="false" src="mapas/fortaleza-renda-thumb.webp" alt="Mapa: Fortaleza: pontos de ônibus qualificados e renda familiar per capita">
+              <span>Pontos e renda</span>
+            </figure>
+          </div>
+        </article>
+        </div>
+        <div class="grid maps compact" style="margin-top: 16px">
         <article class="card map-group">
           <header><h4>Geologia</h4><p>Litoral sul catarinense · 2023</p></header>
           <div class="map-tiles">
-            <a class="tile" href="https://i.imgur.com/0vxvJYF.png" target="_blank" rel="noopener" title="Geologia do litoral sul catarinense, por idade das rochas">
+            <figure class="tile" title="Geologia do litoral sul catarinense, por idade das rochas">
               <img loading="lazy" draggable="false" src="https://imgur.com/W4z3Ie2.png" alt="Mapa da geologia do litoral sul catarinense, por idade das rochas">
               <span>Idade das rochas</span>
-            </a>
-            <a class="tile" href="https://i.imgur.com/EBvxnAd.png" target="_blank" rel="noopener" title="Geologia do litoral sul catarinense, por classe das rochas">
+            </figure>
+            <figure class="tile" title="Geologia do litoral sul catarinense, por classe das rochas">
               <img loading="lazy" draggable="false" src="https://imgur.com/8RmcdNp.png" alt="Mapa da geologia do litoral sul catarinense, por classe das rochas">
               <span>Classe das rochas</span>
-            </a>
-            <a class="tile" href="https://i.imgur.com/hj1baCL.png" target="_blank" rel="noopener" title="Domínios morfoesculturais do litoral sul catarinense">
+            </figure>
+            <figure class="tile" title="Domínios morfoesculturais do litoral sul catarinense">
               <img loading="lazy" draggable="false" src="https://imgur.com/oQLF3E7.png" alt="Mapa dos domínios morfoesculturais do litoral sul catarinense">
               <span>Domínios morfoesculturais</span>
-            </a>
+            </figure>
+          </div>
+        </article>
+        <article class="card map-group">
+          <header><h4>Demografia indígena</h4><p>População indígena no Rio Grande do Sul · 1991 a 2010</p></header>
+          <div class="map-tiles">
+            <figure class="tile" title="População indígena no Rio Grande do Sul, no ano de 1991">
+              <img loading="lazy" draggable="false" src="https://imgur.com/lcpYr9l.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 1991">
+              <span>1991</span>
+            </figure>
+            <figure class="tile" title="População indígena no Rio Grande do Sul, no ano de 2000">
+              <img loading="lazy" draggable="false" src="https://imgur.com/Xkwhz7J.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 2000">
+              <span>2000</span>
+            </figure>
+            <figure class="tile" title="População indígena no Rio Grande do Sul, no ano de 2010">
+              <img loading="lazy" draggable="false" src="https://imgur.com/5wAbsrS.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 2010">
+              <span>2010</span>
+            </figure>
           </div>
         </article>
         <article class="card map-group">
           <header><h4>Segurança pública</h4><p>Salvamentos do CBMRS no litoral gaúcho · Operação Verão 2022/23</p></header>
           <div class="map-tiles">
-            <a class="tile" href="https://i.imgur.com/UqbyUHb.png" target="_blank" rel="noopener" title="Distribuição dos salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
+            <figure class="tile" title="Distribuição dos salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
               <img loading="lazy" draggable="false" src="https://imgur.com/x9IWhe5.png" alt="Mapa da distribuição dos salvamentos realizados pelo CBMRS no litoral gaúcho">
               <span>Distribuição dos salvamentos</span>
-            </a>
-            <a class="tile" href="https://i.imgur.com/dqTOgrK.png" target="_blank" rel="noopener" title="Variação do número de salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
+            </figure>
+            <figure class="tile" title="Variação do número de salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
               <img loading="lazy" draggable="false" src="https://imgur.com/b7Qqo0P.png" alt="Mapa da variação do número de salvamentos realizados pelo CBMRS no litoral gaúcho">
               <span>Variação dos salvamentos</span>
-            </a>
-          </div>
-        </article>
-        <article class="card map-group">
-          <header><h4>Demografia</h4><p>População indígena no Rio Grande do Sul · 1991 a 2010</p></header>
-          <div class="map-tiles">
-            <a class="tile" href="https://i.imgur.com/qOpYK6O.png" target="_blank" rel="noopener" title="População indígena no Rio Grande do Sul, no ano de 1991">
-              <img loading="lazy" draggable="false" src="https://imgur.com/lcpYr9l.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 1991">
-              <span>1991</span>
-            </a>
-            <a class="tile" href="https://i.imgur.com/OMlzwzs.png" target="_blank" rel="noopener" title="População indígena no Rio Grande do Sul, no ano de 2000">
-              <img loading="lazy" draggable="false" src="https://imgur.com/Xkwhz7J.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 2000">
-              <span>2000</span>
-            </a>
-            <a class="tile" href="https://i.imgur.com/M7GSV7t.png" target="_blank" rel="noopener" title="População indígena no Rio Grande do Sul, no ano de 2010">
-              <img loading="lazy" draggable="false" src="https://imgur.com/5wAbsrS.png" alt="Mapa da população indígena no Rio Grande do Sul, no ano de 2010">
-              <span>2010</span>
-            </a>
-          </div>
-        </article>
-        <article class="card map-group">
-          <header><h4>Transporte coletivo · Porto Alegre</h4><p>Pontos de ônibus qualificados, grupos focais e renda familiar per capita</p></header>
-          <div class="map-tiles">
-            <a class="tile" href="mapas/poa-grupos-focais.webp" target="_blank" rel="noopener" title="Porto Alegre: grupos focais e renda familiar per capita">
-              <img loading="lazy" draggable="false" src="mapas/poa-grupos-focais-thumb.webp" alt="Mapa: Porto Alegre: grupos focais e renda familiar per capita">
-              <span>Grupos focais</span>
-            </a>
-            <a class="tile" href="mapas/poa-pontos.webp" target="_blank" rel="noopener" title="Porto Alegre: pontos de ônibus qualificados sobre imagem de satélite">
-              <img loading="lazy" draggable="false" src="mapas/poa-pontos-thumb.webp" alt="Mapa: Porto Alegre: pontos de ônibus qualificados sobre imagem de satélite">
-              <span>Pontos qualificados</span>
-            </a>
-            <a class="tile" href="mapas/poa-renda-pontos.webp" target="_blank" rel="noopener" title="Porto Alegre: pontos de ônibus qualificados e renda familiar per capita">
-              <img loading="lazy" draggable="false" src="mapas/poa-renda-pontos-thumb.webp" alt="Mapa: Porto Alegre: pontos de ônibus qualificados e renda familiar per capita">
-              <span>Pontos e renda</span>
-            </a>
-          </div>
-        </article>
-        <article class="card map-group">
-          <header><h4>Transporte coletivo · Fortaleza</h4><p>Pontos de ônibus qualificados e renda familiar per capita</p></header>
-          <div class="map-tiles">
-            <a class="tile" href="mapas/fortaleza-pontos.webp" target="_blank" rel="noopener" title="Fortaleza: pontos de ônibus qualificados sobre imagem de satélite">
-              <img loading="lazy" draggable="false" src="mapas/fortaleza-pontos-thumb.webp" alt="Mapa: Fortaleza: pontos de ônibus qualificados sobre imagem de satélite">
-              <span>Pontos qualificados</span>
-            </a>
-            <a class="tile" href="mapas/fortaleza-renda.webp" target="_blank" rel="noopener" title="Fortaleza: pontos de ônibus qualificados e renda familiar per capita">
-              <img loading="lazy" draggable="false" src="mapas/fortaleza-renda-thumb.webp" alt="Mapa: Fortaleza: pontos de ônibus qualificados e renda familiar per capita">
-              <span>Pontos e renda</span>
-            </a>
+            </figure>
           </div>
         </article>
         </div>
@@ -313,15 +313,17 @@
         </article>
       </div>
       <div class="grid" style="margin-top: 24px">
-        <article class="card work-card print-card">
-          <p class="kind">Aplicação web · acesso restrito</p>
-          <h3>Registro de despesas</h3>
-          <p>Aplicação para registrar despesas de viagem com foto ou arquivo da nota fiscal, categoria, valor e descrição. Organiza os gastos por viagem, anexa o cartão de embarque e gera o relatório da viagem para o reembolso.</p>
-          <ul class="chips"><li>React</li><li>Vite</li><li>Tailwind CSS</li><li>jsPDF</li></ul>
-          <div class="prints"><a href="prints/desp-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-registro.webp" alt="Tela de registro de uma despesa" width="1440" height="900"></a><a href="prints/desp-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-viagens.webp" alt="Tela de viagens; nomes, datas e valores ocultados" width="1440" height="900"></a></div>
-          <p class="prints-label">Versão mobile</p>
-          <div class="prints mobile"><a href="prints/desp-mobile-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-registro.webp" alt="Versão mobile: registro de uma despesa" width="780" height="1688"></a><a href="prints/desp-mobile-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-viagens.webp" alt="Versão mobile: viagens, com nomes, datas e valores ocultados" width="780" height="1688"></a></div>
-          <p class="ctx">Sistema de acesso restrito. Informações ocultadas nas imagens.</p>
+        <article class="card work-card print-card compact">
+          <div class="pc-text">
+            <p class="kind">Aplicação web · acesso restrito</p>
+            <h3>Registro de despesas</h3>
+            <p>Aplicação para registrar despesas de viagem com foto ou arquivo da nota fiscal, categoria, valor e descrição. Organiza os gastos por viagem, anexa o cartão de embarque e gera o relatório da viagem para o reembolso.</p>
+            <ul class="chips"><li>React</li><li>Vite</li><li>Tailwind CSS</li><li>jsPDF</li></ul>
+          </div>
+          <div class="pc-shots">
+            <div class="strip"><a href="prints/desp-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-registro.webp" alt="Tela de registro de uma despesa"></a><a href="prints/desp-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-viagens.webp" alt="Tela de viagens; nomes, datas e valores ocultados"></a><a href="prints/desp-mobile-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-registro.webp" alt="Versão mobile: registro de uma despesa"></a><a href="prints/desp-mobile-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-viagens.webp" alt="Versão mobile: viagens, com nomes, datas e valores ocultados"></a></div>
+            <p class="ctx">Telas desktop e mobile. Sistema de acesso restrito, com informações ocultadas nas imagens.</p>
+          </div>
         </article>
       </div>
     </section>

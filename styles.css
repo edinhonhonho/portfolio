@@ -320,35 +320,12 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     white-space: nowrap;
 }
 
-.champ-legend {
-    position: absolute;
-    left: 12px;
-    bottom: 28px;
-    z-index: 600;
-    display: grid;
-    gap: 3px;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, .94);
-    font-size: .78rem;
-}
-
-.champ-legend .legend-title { font-weight: 700; margin-bottom: 2px; font-size: .8rem; color: var(--ink); }
-.champ-legend span { display: flex; align-items: center; gap: 8px; }
-.champ-legend i { width: 16px; height: 12px; border-radius: 3px; }
-
 .champ-status { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 700; font-size: .85rem; color: var(--muted); background: rgba(255,255,255,.9); padding: 2px 12px; border-radius: 12px; }
 .champ-status:empty { display: none; }
 
 @media (max-width: 760px) {
     #champ-leaflet { height: 420px; }
     .champ-card { padding: 16px; }
-}
-
-@media (max-width: 760px) {
-    .champ-legend { grid-template-columns: repeat(2, auto); column-gap: 14px; padding: 8px 10px; }
-    .champ-legend .legend-title { grid-column: 1 / -1; }
 }
 
 /* Sub-groups inside a section */
@@ -358,7 +335,7 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 .subdesc { color: var(--muted); margin: 4px 0 20px; }
 
 /* Interactive hero hexagons */
-.hexes { pointer-events: none; }
+.hexes { pointer-events: none; overflow: visible; }
 .hexes polygon { opacity: .9; transition: opacity .2s, fill .2s; }
 .hexes g g polygon { transition: none; }
 
@@ -408,10 +385,36 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 .map-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .tile { display: flex; flex-direction: column; gap: 5px; text-decoration: none; }
 .tile img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: left top; border: 1px solid var(--line); border-radius: 8px; background: #fff; transition: border-color .2s; }
-.tile:hover img { border-color: var(--red); }
 .tile span { font-size: .72rem; line-height: 1.25; color: var(--muted); }
 
 /* Mobile screenshots inside a card */
 .prints-label { margin-top: 10px; font-size: .78rem; font-weight: 700; color: var(--muted); }
 .prints.mobile { grid-template-columns: repeat(auto-fit, minmax(0, 210px)); justify-content: start; margin-top: 0; }
 .prints.mobile a { border-radius: 20px; }
+
+/* Thematic maps: transport maps get the spotlight, the rest stays small. Thumbnails only. */
+.maps.featured { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+.map-group.featured { padding: 18px 20px 20px; gap: 14px; }
+.map-group.featured h4 { font-size: 1.1rem; }
+.map-group.featured header p { font-size: .84rem; }
+.map-group.featured .map-tiles { gap: 12px; }
+.map-group.featured .tile span { font-size: .82rem; }
+.tile { cursor: default; margin: 0; }
+
+/* Compact card with screenshots (text on the left, thumbnails on the right) */
+.print-card.compact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); gap: 14px 32px; align-items: center; padding: 22px 26px; }
+.print-card.compact .pc-text { display: flex; flex-direction: column; gap: 10px; }
+.print-card.compact .pc-shots { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.print-card.compact .strip { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 4px; }
+.print-card.compact .strip a { flex: none; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+.print-card.compact .strip img { display: block; height: 150px; width: auto; }
+
+@media (max-width: 760px) {
+    .topbar .brand { display: none; }
+    .topbar { justify-content: center; }
+    .topbar nav { flex: none; justify-content: center; }
+    .maps.featured, .grid.maps.compact { grid-template-columns: 1fr; }
+    .print-card.compact { grid-template-columns: 1fr; padding: 18px; }
+    .print-card.compact .strip img { height: 130px; }
+    .print-card .prints.mobile { grid-template-columns: repeat(auto-fit, minmax(0, 150px)); }
+}

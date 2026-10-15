@@ -144,13 +144,79 @@
         });
     }
 
+    // Every hexagon painted in the top class: a big show. Rings, a ripple from the last click and
+    // hexagons thrown far out, all in the colours of the scale.
+    function celebrateAll(origin) {
+        if (calm) return;
+        const top = PALETTE.length - 1, color = PALETTE[top];
+        const mix = [color, PALETTE[3], PALETTE[2], '#ffffff', PALETTE[1]];
+        let maxD = 1;
+        for (const h of hexes) { h._d = Math.hypot(h.cx - origin.cx, h.cy - origin.cy); maxD = Math.max(maxD, h._d); }
+        for (const h of hexes) {
+            const delay = (h._d / maxD) * 900;
+            h.el.animate([
+                { transform: 'scale(1) rotate(0deg)', fill: color, opacity: REST },
+                { transform: 'scale(1.75) rotate(60deg)', fill: '#ffffff', opacity: 1, offset: 0.3 },
+                { transform: 'scale(0.8) rotate(120deg)', fill: PALETTE[3], opacity: 1, offset: 0.6 },
+                { transform: 'scale(1) rotate(180deg)', fill: color, opacity: REST }
+            ], { duration: 1400, delay, easing: 'cubic-bezier(.3,1.3,.5,1)' });
+
+            const base = Math.atan2(h.cy - origin.cy, h.cx - origin.cx);
+            for (let k = 0; k < 6; k++) {
+                const g = document.createElementNS(NS, 'g');
+                g.setAttribute('transform', `translate(${h.cx.toFixed(1)} ${h.cy.toFixed(1)})`);
+                const p = document.createElementNS(NS, 'polygon');
+                p.setAttribute('points', hexPoints(5 + Math.random() * 11));
+                p.style.fill = mix[k % mix.length];
+                p.style.opacity = '0';
+                g.appendChild(p);
+                fx.appendChild(g);
+                const ang = base + (Math.random() - 0.5) * 1.8;
+                const far = 90 + Math.random() * 200;
+                const a = p.animate([
+                    { transform: 'translate(0,0) rotate(0deg) scale(.3)', opacity: 1 },
+                    { transform: `translate(${Math.cos(ang) * far * 0.6}px, ${Math.sin(ang) * far * 0.6}px) rotate(${(Math.random() - 0.5) * 400}deg) scale(1.1)`, opacity: 0.9, offset: 0.5 },
+                    { transform: `translate(${Math.cos(ang) * far}px, ${Math.sin(ang) * far + 40}px) rotate(${(Math.random() - 0.5) * 720}deg) scale(.2)`, opacity: 0 }
+                ], { duration: 1500 + Math.random() * 900, delay: delay + 80, easing: 'ease-out', fill: 'backwards' });
+                a.onfinish = () => g.remove();
+            }
+        }
+        // Expanding hexagon rings from the click
+        for (let r = 0; r < 3; r++) {
+            const g = document.createElementNS(NS, 'g');
+            g.setAttribute('transform', `translate(${origin.cx.toFixed(1)} ${origin.cy.toFixed(1)})`);
+            const ring = document.createElementNS(NS, 'polygon');
+            ring.setAttribute('points', hexPoints(28));
+            ring.style.fill = 'none';
+            ring.style.stroke = mix[r];
+            ring.style.strokeWidth = '4';
+            g.appendChild(ring);
+            fx.appendChild(g);
+            const anim = ring.animate([
+                { transform: 'scale(0.4)', opacity: 0.95 },
+                { transform: `scale(${(maxD / 28) * 2.2})`, opacity: 0 }
+            ], { duration: 1700, delay: r * 260, easing: 'ease-out', fill: 'backwards' });
+            anim.onfinish = () => g.remove();
+        }
+    }
+
+    let allDone = false;
     function paintHex(h, lvl) {
         h.lvl = lvl;
         const row = h.row;
-        if (row.hexes.every(x => x.lvl === lvl)) {
-            if (row.done !== lvl) { row.done = lvl; celebrate(row, PALETTE[lvl]); }
-        } else {
-            row.done = -1;
+        const top = PALETTE.length - 1;
+        const everything = hexes.every(x => x.lvl === top);
+        if (everything && !allDone) {
+            allDone = true;
+            row.done = lvl;
+            celebrateAll(h);
+        } else if (!everything) {
+            allDone = false;
+            if (row.hexes.every(x => x.lvl === lvl)) {
+                if (row.done !== lvl) { row.done = lvl; celebrate(row, PALETTE[lvl]); }
+            } else {
+                row.done = -1;
+            }
         }
         schedule();
     }

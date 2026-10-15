@@ -123,7 +123,7 @@
     map.on('move zoom resize', schedule);
 
     let hoverIdx = -1;
-    map.on('mousemove', e => {
+    const onPoint = e => {
         if (!data) return;
         const x = Math.round((e.latlng.lng - data.origin[0]) * 1e5);
         const y = Math.round((e.latlng.lat - data.origin[1]) * 1e5);
@@ -146,12 +146,13 @@
         tip.style.left = (e.containerPoint.x + 14) + 'px';
         tip.style.top = (e.containerPoint.y + 14) + 'px';
         tip.hidden = false;
-    });
+    };
+    map.on('mousemove', onPoint);
+    map.on('click', onPoint); // touch screens
     map.on('mouseout', () => { hoverIdx = -1; tip.hidden = true; schedule(); });
 
     const cityBtns = document.getElementById('champ-cities');
     const layerBtns = document.getElementById('champ-layers');
-    const legend = document.getElementById('champ-legend');
     const status = document.getElementById('champ-status');
 
     function renderControls() {
@@ -161,11 +162,7 @@
             b.setAttribute('aria-pressed', String(b.dataset.layer === layer));
         });
         cityBtns.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.city === city)));
-        const def = LAYERS[layer];
-        legend.innerHTML = '<p class="legend-title">' + def.label + '</p>' + def.breaks.map((b, i) => {
-            const text = i === 0 ? '0' : fmt(def.breaks[i - 1]) + ' – ' + fmt(b);
-            return '<span><i style="background:' + COLORS[i] + '"></i>' + text + '</span>';
-        }).join('');
+
     }
 
     // Fit the city, then lock panning and zooming to it
