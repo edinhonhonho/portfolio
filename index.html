@@ -62,7 +62,7 @@
 <polygon data-l="1" fill="#cddfa1" points="232.4,14.2 207.8,28.4 183.3,14.2 183.3,-14.2 207.8,-28.4 232.4,-14.2"/>
     </svg>
     <div class="hero-text">
-      <p class="eyebrow">Geógrafo · Porto Alegre/RS</p>
+      <p class="eyebrow">Geógrafo · Mobilidade Urbana</p>
       <h1>Edinho</h1>
       <p class="sub">Mapas, análises espaciais e relatórios para entender e melhorar a mobilidade, a segurança e o clima nas cidades.</p>
       <div class="cta">
@@ -86,27 +86,27 @@
         <article class="card champ-card" id="champ-map">
           <div class="champ-head">
             <h3>Aplicação de metodologia para análise de exposição climática</h3>
-            <p>Diagnóstico do Mutirão Brasil / CHAMP em grade hexagonal, para Serra, Contagem e Maranguape: exposição a alagamentos, deslizamentos, inundações e ondas de calor. Passe o mouse ou toque em um hexágono para ver o valor.</p>
+            <p>Diagnóstico do Mutirão Brasil em grade hexagonal, para Serra, Contagem e Maranguape: exposição a alagamentos, deslizamentos, inundações e ondas de calor.</p>
           </div>
           <div class="champ-controls">
-            <div id="champ-cities" class="seg" role="group" aria-label="Cidade">
-              <button type="button" data-city="serra" aria-pressed="true">Serra</button>
-              <button type="button" data-city="contagem" aria-pressed="false">Contagem</button>
+            <div class="champ-group"><span class="champ-label">Cidade</span><div id="champ-cities" class="seg seg-city" role="group" aria-label="Cidade">
+              <button type="button" data-city="serra" aria-pressed="false">Serra</button>
+              <button type="button" data-city="contagem" aria-pressed="true">Contagem</button>
               <button type="button" data-city="maranguape" aria-pressed="false">Maranguape</button>
-            </div>
-            <div id="champ-layers" class="seg" role="group" aria-label="Camada">
-              <button type="button" data-layer="alagamento" aria-pressed="true">Alagamentos</button>
+            </div></div>
+            <div class="champ-group"><span class="champ-label">Ameaça</span><div id="champ-layers" class="seg seg-threat" role="group" aria-label="Ameaça">
+              <button type="button" data-layer="alagamento" aria-pressed="false">Alagamentos</button>
               <button type="button" data-layer="deslizamento" aria-pressed="false">Deslizamentos</button>
               <button type="button" data-layer="inundacao" aria-pressed="false">Inundações</button>
-              <button type="button" data-layer="calor" aria-pressed="false">Ondas de calor</button>
-            </div>
+              <button type="button" data-layer="calor" aria-pressed="true">Ondas de calor</button>
+            </div></div>
           </div>
           <div class="champ-stage">
             <div id="champ-leaflet" role="img" aria-label="Mapa interativo de hexágonos: aplicação de metodologia para análise de exposição climática e segurança viária"></div>
             <div id="champ-tip" class="champ-tip" hidden></div>
             <p id="champ-status" class="champ-status" role="status"></p>
           </div>
-          <p class="ctx">Trabalho realizado para o WRI Brasil / Mutirão Brasil – CHAMP. Elaboração: Edinho. Mapa-base: Esri, HERE, Garmin e colaboradores do OpenStreetMap.</p>
+          <p class="ctx">Trabalho realizado para o WRI Brasil / Mutirão Brasil. Elaboração: Edinho. Mapa-base: Esri, HERE, Garmin e colaboradores do OpenStreetMap.</p>
         </article>
         </div>
         <div class="grid masonry" style="margin-top: 24px">
@@ -115,7 +115,7 @@
           <h3>Velocidade média estimada de municípios</h3>
           <p>Estimativa da velocidade média das vias de municípios a partir de dados da Google Routes API, tratados e espacializados em Python (GeoPandas) e QGIS, para Serra, Salvador, Belém, Contagem e Maranguape.</p>
           <ul class="chips"><li>Python</li><li>GeoPandas</li><li>QGIS</li></ul>
-          <p class="ctx">Mutirão Brasil / CHAMP · WRI Brasil</p>
+          <p class="ctx">Mutirão Brasil · WRI Brasil</p>
         </article>
         </div>
       </div>
@@ -128,7 +128,7 @@
           <h3>Repositório QualiÔnibus</h3>
           <p>Repositório do Grupo de Benchmarking QualiÔnibus: reúne reuniões, indicadores de qualidade, pesquisa de satisfação, materiais técnicos, grupos de trabalho e a gestão do grupo, com uma seção de boas práticas.</p>
           <ul class="chips"><li>React</li><li>Vite</li><li>Tailwind CSS</li></ul>
-          <div class="prints"><a href="prints/repo-inicio.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/repo-inicio.webp" alt="Início do repositório, com as seções do grupo" width="1440" height="900"></a><a href="prints/repo-materiais.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/repo-materiais.webp" alt="Página de materiais técnicos do repositório, com guias, atas e manuais" width="1440" height="900"></a></div>
+          <div class="prints"><a href="prints/repo-inicio.webp" data-zoom><img loading="lazy" src="prints/repo-inicio.webp" alt="Início do repositório, com as seções do grupo" width="1440" height="900"></a><a href="prints/repo-materiais.webp" data-zoom><img loading="lazy" src="prints/repo-materiais.webp" alt="Página de materiais técnicos do repositório, com guias, atas e manuais" width="1440" height="900"></a></div>
           <p class="ctx">Sistema de acesso restrito. Informações ocultadas nas imagens.</p>
         </article>
         <article class="card work-card print-card">
@@ -136,7 +136,7 @@
           <h3>Painel da Pesquisa de Satisfação</h3>
           <p>Painel com os resultados da Pesquisa de Satisfação QualiÔnibus: compara cidades com as perguntas padronizadas, acompanha a evolução de cada cidade ao longo das edições e mostra a cobertura da pesquisa por cidade e ano.</p>
           <ul class="chips"><li>Next.js</li><li>React</li></ul>
-          <div class="prints"><a href="prints/painel-comparar.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/painel-comparar.webp" alt="Painel em modo Comparar cidades; cidades, notas e distribuições ocultadas" width="1440" height="900"></a><a href="prints/painel-evolucao.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/painel-evolucao.webp" alt="Painel em modo Evolução no tempo; cidade e resultados ocultados" width="1440" height="900"></a></div>
+          <div class="prints"><a href="prints/painel-comparar.webp" data-zoom><img loading="lazy" src="prints/painel-comparar.webp" alt="Painel em modo Comparar cidades; cidades, notas e distribuições ocultadas" width="1440" height="900"></a><a href="prints/painel-evolucao.webp" data-zoom><img loading="lazy" src="prints/painel-evolucao.webp" alt="Painel em modo Evolução no tempo; cidade e resultados ocultados" width="1440" height="900"></a></div>
           <p class="ctx">Sistema de acesso restrito. Informações ocultadas nas imagens.</p>
         </article>
         <article class="card work-card print-card">
@@ -144,7 +144,7 @@
           <h3>Processos da pesquisa de satisfação</h3>
           <p>Sistema web para processar a Pesquisa de Satisfação QualiÔnibus: cadastra as edições, calcula o erro amostral, processa os dados das pesquisas e gera o relatório e a síntese de cada edição, com gráficos e arquivos por edição.</p>
           <ul class="chips"><li>Processamento de dados</li><li>Erro amostral</li><li>Relatórios</li><li>Gráficos</li></ul>
-          <div class="prints"><a href="prints/proc-cadastrar.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/proc-cadastrar.webp" alt="Tela de cadastro de edição da pesquisa" width="1440" height="900"></a><a href="prints/proc-processar.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/proc-processar.webp" alt="Tela de processamento das pesquisas; lista de edições ocultada" width="1440" height="900"></a></div>
+          <div class="prints"><a href="prints/proc-cadastrar.webp" data-zoom><img loading="lazy" src="prints/proc-cadastrar.webp" alt="Tela de cadastro de edição da pesquisa" width="1440" height="900"></a><a href="prints/proc-processar.webp" data-zoom><img loading="lazy" src="prints/proc-processar.webp" alt="Tela de processamento das pesquisas; lista de edições ocultada" width="1440" height="900"></a></div>
           <p class="ctx">Sistema de acesso restrito. Informações ocultadas nas imagens.</p>
         </article>
         </div>
@@ -158,7 +158,7 @@
           <h3>Diagnósticos de exposição climática e segurança viária</h3>
           <p>Relatórios de diagnóstico de exposição climática e segurança viária para Serra, Salvador, Belém, Contagem e Maranguape, com o objetivo de identificar locais prioritários para a inclusão de soluções baseadas na natureza (SBNs).</p>
           <ul class="chips"><li>Relatório</li><li>Diagnóstico</li><li>SBNs</li></ul>
-          <p class="ctx">Mutirão Brasil / CHAMP · WRI Brasil</p>
+          <p class="ctx">Mutirão Brasil · WRI Brasil</p>
         </article>
         <article class="card work-card">
           <p class="kind">Publicação · ata de conferência</p>
@@ -188,7 +188,7 @@
       </div>
       <div class="subgroup">
         <h3 class="subhead">Mapas temáticos</h3>
-        <p class="subdesc">Mapas produzidos em QGIS sobre transporte coletivo, geologia, demografia indígena e segurança pública. Mostrados em miniatura.</p>
+        <p class="subdesc">Mapas produzidos em QGIS sobre transporte coletivo, geologia e demografia indígena. Mostrados em miniatura.</p>
         <div class="grid maps featured">
         <article class="card map-group featured">
           <header><h4>Transporte coletivo · Porto Alegre</h4><p>Pontos de ônibus qualificados, grupos focais e renda familiar per capita</p></header>
@@ -260,19 +260,6 @@
             </figure>
           </div>
         </article>
-        <article class="card map-group">
-          <header><h4>Segurança pública</h4><p>Salvamentos do CBMRS no litoral gaúcho · Operação Verão 2022/23</p></header>
-          <div class="map-tiles">
-            <figure class="tile" title="Distribuição dos salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
-              <img loading="lazy" draggable="false" src="https://imgur.com/x9IWhe5.png" alt="Mapa da distribuição dos salvamentos realizados pelo CBMRS no litoral gaúcho">
-              <span>Distribuição dos salvamentos</span>
-            </figure>
-            <figure class="tile" title="Variação do número de salvamentos realizados pelo CBMRS no litoral gaúcho, na 6ª Operação Verão 2022/23">
-              <img loading="lazy" draggable="false" src="https://imgur.com/b7Qqo0P.png" alt="Mapa da variação do número de salvamentos realizados pelo CBMRS no litoral gaúcho">
-              <span>Variação dos salvamentos</span>
-            </figure>
-          </div>
-        </article>
         </div>
       </div>
     </section>
@@ -321,7 +308,7 @@
             <ul class="chips"><li>React</li><li>Vite</li><li>Tailwind CSS</li><li>jsPDF</li></ul>
           </div>
           <div class="pc-shots">
-            <div class="strip"><a href="prints/desp-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-registro.webp" alt="Tela de registro de uma despesa"></a><a href="prints/desp-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-viagens.webp" alt="Tela de viagens; nomes, datas e valores ocultados"></a><a href="prints/desp-mobile-registro.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-registro.webp" alt="Versão mobile: registro de uma despesa"></a><a href="prints/desp-mobile-viagens.webp" target="_blank" rel="noopener"><img loading="lazy" src="prints/desp-mobile-viagens.webp" alt="Versão mobile: viagens, com nomes, datas e valores ocultados"></a></div>
+            <div class="strip"><a href="prints/desp-registro.webp" data-zoom><img loading="lazy" src="prints/desp-registro.webp" alt="Tela de registro de uma despesa"></a><a href="prints/desp-viagens.webp" data-zoom><img loading="lazy" src="prints/desp-viagens.webp" alt="Tela de viagens; nomes, datas e valores ocultados"></a><a href="prints/desp-mobile-registro.webp" data-zoom><img loading="lazy" src="prints/desp-mobile-registro.webp" alt="Versão mobile: registro de uma despesa"></a><a href="prints/desp-mobile-viagens.webp" data-zoom><img loading="lazy" src="prints/desp-mobile-viagens.webp" alt="Versão mobile: viagens, com nomes, datas e valores ocultados"></a></div>
             <p class="ctx">Telas desktop e mobile. Sistema de acesso restrito, com informações ocultadas nas imagens.</p>
           </div>
         </article>
@@ -349,6 +336,8 @@
   <footer>
     <p>Feito com carinho, por Edinho.</p>
   </footer>
+
+  <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-label="Imagem ampliada"><button type="button" class="modal-close" aria-label="Fechar">&times;</button><img alt=""></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="champ.js"></script>

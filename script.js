@@ -246,3 +246,22 @@
     window.addEventListener('pointerup', stop);
     window.addEventListener('pointercancel', stop);
 })();
+
+// Prints open in a modal on the page instead of a new tab
+(function () {
+    const modal = document.getElementById('modal');
+    if (!modal) return;
+    const img = modal.querySelector('img');
+    const close = () => { modal.hidden = true; img.removeAttribute('src'); document.body.classList.remove('modal-open'); };
+    document.addEventListener('click', e => {
+        const a = e.target.closest('a[data-zoom]');
+        if (a) {
+            e.preventDefault();
+            img.src = a.getAttribute('href');
+            img.alt = (a.querySelector('img') || {}).alt || '';
+            modal.hidden = false;
+            document.body.classList.add('modal-open');
+        } else if (!modal.hidden && !e.target.closest('#modal img')) close();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+})();

@@ -45,7 +45,7 @@
     const ctx = canvas.getContext('2d');
     const tip = document.getElementById('champ-tip');
 
-    let city = null, layer = 'alagamento', data = null, grid = null, vals = null, classes = null, raf = 0;
+    let city = null, layer = 'calor', data = null, grid = null, vals = null, classes = null, raf = 0;
     const cache = {};
 
     function buildGrid() {
@@ -200,7 +200,7 @@
     });
 
     // Load lazily when the map scrolls into view
-    const start = () => { map.invalidateSize(); showCity('serra'); };
+    const start = () => { map.invalidateSize(); showCity('contagem'); };
     if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '300px' });
         io.observe(root);

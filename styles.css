@@ -74,7 +74,9 @@ h1, h2, h3 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 /* Hero */
 .hero {
     position: relative;
-    overflow: hidden;
+    z-index: 1;
+    overflow: visible;
+    overflow-x: clip;
     padding: 52px var(--gutter) 44px;
 }
 
@@ -261,7 +263,7 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
 @media (max-width: 760px) {
     .topbar { flex-wrap: wrap; padding: 10px 16px; gap: 8px 16px; }
     .topbar nav { order: 3; flex-basis: 100%; }
-    .hero { padding: 40px 20px 36px; }
+    .hero { padding: 40px 20px 36px; overflow: hidden; }
     .hero { display: flex; flex-direction: column; }
     .hexes { position: absolute; top: 50%; left: 50%; right: auto; transform: translate(-50%, -50%); height: auto; width: min(118vw, 520px); max-width: none; margin: 0; opacity: .38; z-index: 0; }
     .hero-text { z-index: 1; }
@@ -420,3 +422,19 @@ a:focus-visible, input:focus-visible { outline: 2px solid var(--red); outline-of
     .print-card.compact .strip img { height: 130px; }
     .print-card .prints.mobile { grid-template-columns: repeat(auto-fit, minmax(0, 150px)); }
 }
+
+/* CHAMP selectors: city and threat read as two different controls */
+.champ-controls { gap: 14px 40px; align-items: flex-start; }
+.champ-group { display: flex; flex-direction: column; gap: 6px; }
+.champ-label { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.seg-city button { border-radius: 8px; border-color: var(--ink); }
+.seg-city button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.seg-threat button { border-style: dashed; }
+.seg-threat button[aria-pressed="true"] { border-style: solid; }
+
+/* Image modal */
+.modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(28, 26, 25, .78); }
+.modal[hidden] { display: none; }
+.modal img { max-width: 100%; max-height: 100%; border-radius: 10px; background: #fff; box-shadow: 0 20px 60px rgba(0, 0, 0, .4); }
+.modal-close { position: absolute; top: 12px; right: 16px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer; }
+body.modal-open { overflow: hidden; }
